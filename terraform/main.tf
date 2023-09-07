@@ -61,7 +61,8 @@ resource "google_compute_instance" "gear5_instance" {
   scopes = [
     "https://www.googleapis.com/auth/compute",
     "https://www.googleapis.com/auth/devstorage.read_only"
-  ]
+    ]
+  }
 }
 
 resource "google_compute_network" "vpc_network" {
