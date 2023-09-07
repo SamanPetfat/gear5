@@ -57,7 +57,7 @@ resource "google_compute_instance" "gear5_instance" {
   # som vi använder oss av för att autentisera oss mot GCP.
   # Här säger vi bara till terraform att skapa VM:n och använda detta specifika service account.
   service_account {
-    email  = "gear5-linux@interns-fredrik.iam.gserviceaccount.com"
+    email = "gear5-linux@interns-fredrik.iam.gserviceaccount.com"
     scopes = [
       "https://www.googleapis.com/auth/compute",
       "https://www.googleapis.com/auth/devstorage.read_only"
