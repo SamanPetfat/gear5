@@ -40,9 +40,9 @@ resource "google_compute_instance" "gear5_instance" {
   }
 
 
-   boot_disk {
-     initialize_params {
-       image = "debian-cloud/debian-11"
+  boot_disk {
+    initialize_params {
+      image = "debian-cloud/debian-11"
     }
   }
 
