@@ -55,10 +55,12 @@ jobs:
   
       - name: Execute commands on remote server
         run: | 
-          gcloud compute ssh ${{ needs.setup_staging_srv.outputs.instance_name }} \
+          gcloud compute ssh \
+          ${{ needs.setup_staging_srv.outputs.instance_name }} \
           --project=${{ secrets.GCP_PROJECT_ID }} \
           --zone=europe-north1-a --tunnel-through-iap \
-          --command="cat /etc/hostname && echo 'Hello world, im running in the cloud.' \
+          --command="cat /etc/hostname && \
+          echo 'Hello world, im running in the cloud.' \
           echo $USERNAME"
   
   tear_down_staging_srv:
