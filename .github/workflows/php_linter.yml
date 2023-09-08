@@ -10,8 +10,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Lint PHP files
-        uses: overtrue/phplint@main
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
         with:
-          path: .
-          options: --exclude=vendor
+          php-version: '8.2.6' # or your desired PHP version
+          extensions: mbstring, intl, gd, xml, ctype, zip # Add other extensions if required
+          tools: phpcs # This installs PHP CodeSniffer
+
+      - name: Run PHP_CodeSniffer
+        run: |
+          phpcs --standard=PSR2 . --ignore=vendor/* # Change to your preferred standard and any other options you want
+       
