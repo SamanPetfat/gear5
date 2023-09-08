@@ -41,6 +41,12 @@ jobs:
     
     - name: Run PHP_CodeSniffer
       run: |
-        phpcs --standard=PSR2 . --ignore=vendor/* || echo "Still errors, fix these mmanually"
+        if phpcs --standard=PSR2 . --ignore=vendor/* --warning-severity=0; then
+          echo "No coding standards errors found."
+        else
+          echo "Coding standards errors detected."
+          exit 1
+        fi
+
 
     
