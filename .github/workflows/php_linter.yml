@@ -38,6 +38,8 @@ jobs:
         commit-message: 'Apply PHPCBF fixes'
         branch: 'phpcbf-fixes'
         base: ${{ github.head_ref }}
+        token: ${{ secrets.PHPLINT_TOKEN }}
+
     
     - name: Run PHP_CodeSniffer
       run: |
