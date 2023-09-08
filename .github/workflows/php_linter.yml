@@ -41,12 +41,17 @@ jobs:
     
     - name: Run PHP_CodeSniffer
       run: |
+        if [[ "${{ steps.create-pr.outputs.pull-request-number }}" != "" ]]; then
+          echo "A PR was created. Marking this step as failed."
+          exit 1
+        fi
         if phpcs --standard=PSR2 . --ignore=vendor/* --warning-severity=0; then
           echo "No coding standards errors found."
         else
           echo "Coding standards errors detected."
           exit 1
         fi
+
 
 
     
