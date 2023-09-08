@@ -20,7 +20,7 @@ jobs:
 
     - name: Run PHP_CodeSniffer Fixer
       run: |
-        phpcbf --standard=PSR2 . --ignore=vendor/* # Change to your preferred standard
+        phpcbf --standard=PSR2 . --ignore=vendor/* || echo "PHPCBF could not fix all violations"
 
     - name: Run PHP_CodeSniffer
       run: |
