@@ -10,13 +10,15 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Setup PHP
       uses: shivammathur/setup-php@v2
       with:
-        php-version: '7.4' # or your desired PHP version
-        extensions: mbstring, intl, gd, xml, ctype, zip # Add other extensions if required
-        tools: phpcs, phpcbf # This installs PHP CodeSniffer and PHP Code Beautifier and Fixer
+        php-version: '8.2.10'
+        extensions: mbstring, intl, gd, xml, ctype, zip
+        tools: phpcs, phpcbf
 
     - name: Run PHP_CodeSniffer Fixer
       run: |
@@ -35,7 +37,7 @@ jobs:
         title: 'Automated PHPCBF Fixes'
         commit-message: 'Apply PHPCBF fixes'
         branch: 'phpcbf-fixes'
-        base: ${{ github.head_ref }}  # This sets the base branch as the branch that triggered the workflow
+        base: ${{ github.head_ref }}
     
     - name: Run PHP_CodeSniffer
       run: |
