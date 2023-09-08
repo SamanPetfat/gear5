@@ -1,23 +1,42 @@
 ---
-name: PHP Linting
+name: PHP CodeSniffer Auto Fix
 
 on: [pull_request, workflow_dispatch]
 
 jobs:
-  phplint:
+  phpcs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.2.6' # or your desired PHP version
-          extensions: mbstring, intl, gd, xml, ctype, zip # Add other extensions if required
-          tools: phpcs # This installs PHP CodeSniffer
+    - name: Checkout code
+      uses: actions/checkout@v4
 
-      - name: Run PHP_CodeSniffer
-        run: |
-          phpcs --standard=PSR2 . --ignore=vendor/* # Change to your preferred standard and any other options you want
-       
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '7.4' # or your desired PHP version
+        extensions: mbstring, intl, gd, xml, ctype, zip # Add other extensions if required
+        tools: phpcs, phpcbf # This installs PHP CodeSniffer and PHP Code Beautifier and Fixer
+
+    - name: Run PHP_CodeSniffer Fixer
+      run: |
+        phpcbf --standard=PSR2 . --ignore=vendor/* # Change to your preferred standard
+
+    - name: Run PHP_CodeSniffer
+      run: |
+        phpcs --standard=PSR2 . --ignore=vendor/* # Change to your preferred standard
+
+    - name: Commit changes
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add -A
+        git commit -m "Apply PHPCBF fixes" || echo "No changes to commit"
+
+    - name: Create Pull Request
+      uses: peter-evans/create-pull-request@v3
+      with:
+        title: 'Automated PHPCBF Fixes'
+        commit-message: 'Apply PHPCBF fixes'
+        branch: 'phpcbf-fixes'
+        base: ${{ github.head_ref }}  # This sets the base branch as the branch that triggered the workflow
