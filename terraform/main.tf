@@ -36,10 +36,13 @@ resource "google_compute_instance" "gear5_instance" {
   # Så jag vill inte göra om det misstaget igen.
   # Detta är inget som är viktigt egentligen för oss.
   metadata = {
-    block-project-ssh-keys = "true"
+    block - project-ssh-keys = "true"
   }
 
-
+  labels = {
+      type = "staging"
+  }
+    
   boot_disk {
     initialize_params {
       image = "debian-cloud/debian-11"
