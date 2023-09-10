@@ -42,7 +42,7 @@ jobs:
       uses: actions/checkout@v4
     
     - name: Setup GCP Authentication
-      uses: ./.github/actions/setup-gcp-authentication
+      uses: ./.github/workflows/setup-gcp-authentication
 
     - name: Fetch secrets 
       run: |
