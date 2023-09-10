@@ -1,0 +1,16 @@
+name: 'Setup GCP Authentication'
+description: 'Authenticates the runner with GCP using a service account key'
+inputs:
+  gcp_sa_key:
+    description: 'GCP Service Account Key'
+    required: true
+runs:
+  using: 'composite'
+  steps:
+    - name: Authenticate with GCP
+      uses: 'google-github-actions/auth@v1'
+      with:
+        credentials_json: ${{ inputs.gcp_sa_key }}
+
+    - name: 'Set up Cloud SDK'
+      uses: 'google-github-actions/setup-gcloud@v1'
