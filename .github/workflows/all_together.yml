@@ -24,11 +24,7 @@ jobs:
           echo "::add-mask::${{ env.GCLOUD_PROJECT }}"
           echo "::add-mask::${{ env.GCP_PROJECT }}"
           echo "::add-mask::${{ env.GOOGLE_CLOUD_PROJECT }}" 
-          echo "::add-mask::${{ INSTANCE_IP }}"
-          echo "::add-mask::${{ INSTANCE_NAME }}"
-          echo "::add-mask::${{ INSTANCE_ZONE }}"
-          echo "::add-mask::${{ IP }}"
-      
+
       - name: Authenticate with GCP
         uses: 'google-github-actions/auth@v1'
         with:
@@ -61,10 +57,10 @@ jobs:
         echo "::add-mask::${{ env.GCLOUD_PROJECT }}"
         echo "::add-mask::${{ env.GCP_PROJECT }}"
         echo "::add-mask::${{ env.GOOGLE_CLOUD_PROJECT }}" 
-        echo "::add-mask::${{ INSTANCE_IP }}"
-        echo "::add-mask::${{ INSTANCE_NAME }}"
-        echo "::add-mask::${{ INSTANCE_ZONE }}"
-        echo "::add-mask::${{ IP }}"
+        echo "::add-mask::${{ env.INSTANCE_IP }}"
+        echo "::add-mask::${{ env.INSTANCE_NAME }}"
+        echo "::add-mask::${{ env.INSTANCE_ZONE }}"
+        echo "::add-mask::${{ env.IP }}"
 
     - name: Authenticate with GCP
       uses: 'google-github-actions/auth@v1'
