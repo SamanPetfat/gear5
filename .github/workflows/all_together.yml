@@ -19,8 +19,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
     
+      - name: Authenticate with GCP
+        uses: 'google-github-actions/auth@v1'
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+      
       - name: Setup GCP Authentication
-        uses: ./.github/workflows/setup-gcp-authentication
+        uses: ./.github/actions/setup-gcp-authentication
+      
 
       - name: Terraform Initialize and Apply
         working-directory: ./terraform
