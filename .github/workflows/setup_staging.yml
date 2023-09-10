@@ -2,10 +2,10 @@
 name: Setup staging server
 
 on:
-  workflow_run:
-    workflows: ["Create staging server"]
-    types:
-      - completed
+  #workflow_run:
+    #workflows: ["Create staging server"]
+    #types:
+      #- completed
   workflow_dispatch:
 
 jobs:
