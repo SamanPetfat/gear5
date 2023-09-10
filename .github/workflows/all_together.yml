@@ -49,6 +49,9 @@ jobs:
         echo "SA_KEY_PATH=${SA_KEY_PATH}" >> $GITHUB_ENV
         echo "PROJECT_ID=${GCP_PROJECT_ID}" >> $GITHUB_ENV
 
+    - name: Display Updated Inventory File
+      run: cat ./ansible_fredrik/misc/inventory.gcp.yml
+
     - name: Update Inventory File
       run: |
         sed -i "s|PATH_TO_SERVICE_ACCOUNT_FILE|$SA_KEY_PATH|" ./ansible_fredrik/misc/inventory.gcp.yml
