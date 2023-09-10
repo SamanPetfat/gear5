@@ -51,22 +51,29 @@ jobs:
         credentials_json: '${{ secrets.GCP_SA_KEY }}'  
     
     - name: 'Set up Cloud SDK'
-      uses: 'google-github-actions/setup-gcloud@v1'
-
-    - name: Get instance IP
+        uses: 'google-github-actions/setup-gcloud@v1'
+  
+    - name: Fetch instance name and zone
+      id: fetch_instance_name
+      run: |
+        INSTANCE_NAME=$(gcloud compute instances list --filter="labels.type=staging" --format='value(name)')
+        echo "::set-output name=instance_name::$INSTANCE_NAME"
+        INSTANCE_ZONE=$(gcloud compute instances list --filter="labels.type=staging" --format='value(zone)')
+        echo "::set-output name=instance_zone::$INSTANCE_ZONE"
+    
+        - name: Get instance IP
       id: get_ip
       run: |
-        echo "::set-output name=ip::$(gcloud compute instances describe instance-name \
-        --format='get(networkInterfaces[0].accessConfigs[0].natIP)')"
+        INSTANCE_NAME=${{ steps.fetch_instance_name.outputs.instance_name }}
+        INSTANCE_ZONE=${{ steps.fetch_instance_name.outputs.instance_zone }}
+        INSTANCE_IP=$(gcloud compute instances describe $INSTANCE_NAME --zone $INSTANCE_ZONE --format='value(networkInterfaces[0].accessConfigs[0].natIP)')
+        echo "::set-output name=ip::$INSTANCE_IP"
 
     - name: Update default.yml
       run: |
-        sed -i "s|your_domain|$IP|" ./ansible_fredrik/vars/default.yml
+        IP=${{ steps.get_ip.outputs.ip }}
+        sed -i "s|your_domain|$IP|" ./ansible_fredrik/vars/default.yml 
 
-    - name: Display default.yml
-      run: |
-        cat ./ansible_fredrik/vars/default.yml
-        
     - name: Mask generated GCP values
       run: |
         echo "::add-mask::${{ env.CLOUDSDK_AUTH_CREDENTIAL_FILE_OVERRIDE }}"
