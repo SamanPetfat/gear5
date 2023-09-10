@@ -21,12 +21,14 @@ variable "compute_config" {
   type = object({
     name : string
     type : string
+    hostname : string
   })
 
   description = "Compute configuration"
 
   default = {
-    name = "gear5-staging-srv1"
-    type = "e2-medium"
+    name     = "gear5-staging-srv1"
+    type     = "e2-medium"
+    hostname = "gear5.staging"
   }
 }

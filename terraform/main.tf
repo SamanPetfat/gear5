@@ -29,6 +29,7 @@ provider "google" {
 resource "google_compute_instance" "gear5_instance" {
   name         = var.compute_config.name
   machine_type = var.compute_config.type
+  hostname     = var.compute_config.hostname
 
 
   # Detta behövs för att Devoteam hatar project wide ssh keys och jag har redan fått linjalen på fingrarna för att jag
@@ -44,9 +45,15 @@ resource "google_compute_instance" "gear5_instance" {
   }
     
   boot_disk {
+    device_name = "gear5-staging-srv2"
+
     initialize_params {
-      image = "debian-cloud/debian-11"
+      image = "projects/ubuntu-os-cloud/global/images/ubuntu-2004-focal-v20230907"
+      size  = 15
+      type  = "pd-ssd"
     }
+
+    mode = "READ_WRITE"
   }
 
   network_interface {
