@@ -1,8 +1,0 @@
-name: 'Setup GCP Authentication'
-description: 'Authenticates the runner with GCP using a service account key'
-runs:
-  using: 'composite'
-  steps:
-    - name: 'Set up Cloud SDK'
-      uses: 'google-github-actions/setup-gcloud@v1'
-
