@@ -60,17 +60,11 @@ jobs:
         echo "::add-mask::${{ env.GCLOUD_PROJECT }}"
         echo "::add-mask::${{ env.GCP_PROJECT }}"
         echo "::add-mask::${{ env.GOOGLE_CLOUD_PROJECT }}"    
-    
-    - name: Display Updated Inventory File
-      run: cat ./ansible_fredrik/misc/inventory.gcp.yml 
 
     - name: Update Inventory File
       run: |
         sed -i "s|PATH_TO_SERVICE_ACCOUNT_FILE|$GOOGLE_GHA_CREDS_PATH|" ./ansible_fredrik/misc/inventory.gcp.yml
-        sed -i "s|PROJECT_ID|$GCP_PROJECT|" ./ansible_fredrik/misc/inventory.gcp.yml  
-    
-    - name: Display Updated Inventory File
-      run: cat ./ansible_fredrik/misc/inventory.gcp.yml    
+        sed -i "s|PROJECT_ID|$GCP_PROJECT|" ./ansible_fredrik/misc/inventory.gcp.yml   
     
     - name: Install dependencies
       run: |

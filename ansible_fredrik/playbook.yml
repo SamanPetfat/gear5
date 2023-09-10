@@ -1,14 +1,14 @@
 ---
-- name: Update
-  hosts: staging
-  become: true
+# - name: Update
+#   hosts: staging
+#   become: true
 
-  tasks:
-    - name: Update and upgrade apt packages
-      apt:
-        upgrade: yes
-        update_cache: yes
-        cache_valid_time: 86400
+#   tasks:
+#     - name: Update and upgrade apt packages
+#       apt:
+#         upgrade: yes
+#         update_cache: yes
+#         cache_valid_time: 86400
 
 - name: Install required packages
   hosts: staging  
