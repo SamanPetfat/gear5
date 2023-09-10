@@ -120,5 +120,4 @@ jobs:
         directory: ./ansible_fredrik
         options: |
           --inventory misc/inventory.gcp.yml
-          --verbose
-          -vvvv
+
