@@ -41,9 +41,9 @@ resource "google_compute_instance" "gear5_instance" {
   }
 
   labels = {
-      type = "staging"
+    type = "staging"
   }
-    
+
   boot_disk {
     initialize_params {
       image = "projects/ubuntu-os-cloud/global/images/ubuntu-2004-focal-v20230907"
