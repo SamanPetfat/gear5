@@ -36,6 +36,7 @@ jobs:
     
     - name: Set env vars for later use
       run: |
+        echo "$GCP_SA_KEY" > ./ansible_fredrik/gcp-key.json
         echo "PROJECT_ID=${{ secrets.GCP_PROJECT_ID }}" >> $GITHUB_ENV
         echo "SA_KEY_PATH=gcp-key.json" >> $GITHUB_ENV 
     
