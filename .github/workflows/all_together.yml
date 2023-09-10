@@ -33,27 +33,19 @@ jobs:
     
     - name: Checkout code
       uses: actions/checkout@v4
-    
-    - name: Set env vars for later use
-      run: |
-        echo "$GCP_SA_KEY" > ./ansible_fredrik/gcp-key.json
-        echo "PROJECT_ID=${{ secrets.GCP_PROJECT_ID }}" >> $GITHUB_ENV
-        echo "SA_KEY_PATH=gcp-key.json" >> $GITHUB_ENV 
-    
-    - name: Mask sensitive data
-      run: |
-          echo "::add-mask::${{ secrets.GCP_PROJECT_ID }}"
-          echo "::add-mask::gcp-key.json"
       
     - name: Authenticate with GCP
       uses: 'google-github-actions/auth@v1'
       with:
         credentials_json: '${{ secrets.GCP_SA_KEY }}'  
-
+    
+    - name: Display Updated Inventory File
+      run: cat ./ansible_fredrik/misc/inventory.gcp.yml 
+      
     - name: Update Inventory File
       run: |
-        sed -i "s|PATH_TO_SERVICE_ACCOUNT_FILE|$SA_KEY_PATH|" ./ansible_fredrik/misc/inventory.gcp.yml
-        sed -i "s|PROJECT_ID|$PROJECT_ID|" ./ansible_fredrik/misc/inventory.gcp.yml  
+        sed -i "s|PATH_TO_SERVICE_ACCOUNT_FILE|$GOOGLE_GHA_CREDS_PATH|" ./ansible_fredrik/misc/inventory.gcp.yml
+        sed -i "s|PROJECT_ID|$GCP_PROJECT|" ./ansible_fredrik/misc/inventory.gcp.yml  
     
     - name: Display Updated Inventory File
       run: cat ./ansible_fredrik/misc/inventory.gcp.yml    
