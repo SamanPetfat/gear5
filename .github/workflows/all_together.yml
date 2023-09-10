@@ -51,7 +51,7 @@ jobs:
         credentials_json: '${{ secrets.GCP_SA_KEY }}'  
     
     - name: 'Set up Cloud SDK'
-        uses: 'google-github-actions/setup-gcloud@v1'
+      uses: 'google-github-actions/setup-gcloud@v1'
   
     - name: Fetch instance name and zone
       id: fetch_instance_name
@@ -61,7 +61,7 @@ jobs:
         INSTANCE_ZONE=$(gcloud compute instances list --filter="labels.type=staging" --format='value(zone)')
         echo "::set-output name=instance_zone::$INSTANCE_ZONE"
     
-        - name: Get instance IP
+    - name: Get instance IP
       id: get_ip
       run: |
         INSTANCE_NAME=${{ steps.fetch_instance_name.outputs.instance_name }}
