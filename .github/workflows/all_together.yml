@@ -50,6 +50,23 @@ jobs:
       with:
         credentials_json: '${{ secrets.GCP_SA_KEY }}'  
     
+    - name: 'Set up Cloud SDK'
+      uses: 'google-github-actions/setup-gcloud@v1'
+
+    - name: Get instance IP
+      id: get_ip
+      run: |
+        echo "::set-output name=ip::$(gcloud compute instances describe instance-name \
+        --format='get(networkInterfaces[0].accessConfigs[0].natIP)')"
+
+    - name: Update default.yml
+      run: |
+        sed -i "s|your_domain|$IP|" ./ansible_fredrik/vars/default.yml
+
+    - name: Display default.yml
+      run: |
+        cat ./ansible_fredrik/vars/default.yml
+        
     - name: Mask generated GCP values
       run: |
         echo "::add-mask::${{ env.CLOUDSDK_AUTH_CREDENTIAL_FILE_OVERRIDE }}"

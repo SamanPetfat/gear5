@@ -1,57 +1,66 @@
 ---
-# - name: Update
-#   hosts: staging
-#   become: true
+- name: Update
+  hosts: staging
+  become: true
 
-#   tasks:
-#     - name: Update and upgrade apt packages
-#       apt:
-#         upgrade: yes
-#         update_cache: yes
-#         cache_valid_time: 86400
+  tasks:
+    - name: Update and upgrade apt packages
+      apt:
+        upgrade: yes
+        update_cache: yes
+        cache_valid_time: 86400
 
 - name: Install required packages
   hosts: staging  
   become: true 
   tasks:  
-    - name: Install Apache
-      apt:
-        name: apache2
-        state: present
+    - name: Install LAMP packages
+      apt: name={{ item }} update_cache=yes state=latest
+      loop: [ 'apache2', 'mysql-server', 'python3-pymysql', 'php', 'php-mysql', 'libapache2-mod-php' ]
+    
+    - name: Create document root
+      file:
+        path: "/var/www/{{ http_host }}"
+        state: directory
+        owner: "{{ app_user }}"
+        mode: '0755'
 
-    - name: Ensure Apache is running and enabled
-      service:
-        name: apache2
-        state: started
-        enabled: yes
+    - name: Set up Apache virtualhost
+      template:
+        src: "files/apache.conf.j2"
+        dest: "/etc/apache2/sites-available/{{ http_conf }}"
+      notify: Reload Apache
 
-    - name: Install MySQL server
-      apt:
-        name: 
-          - mysql-server
-          - python3-mysqldb
-        state: present
+    - name: Enable new site
+      shell: /usr/sbin/a2ensite {{ http_conf }}
+      notify: Reload Apache
 
-    - name: Ensure MySQL service is running and enabled
-      service:
-        name: mysql
-        state: started
-        enabled: yes
+    - name: Disable default Apache site
+      shell: /usr/sbin/a2dissite 000-default.conf
+      when: disable_default
+      notify: Reload Apache
+    
+    - name: Sets the root password
+      mysql_user:
+        name: root
+        password: "{{ mysql_root_password }}"
+        login_unix_socket: /var/run/mysqld/mysqld.sock
 
-    - name: Install PHP and related modules
-      apt:
-        name: 
-          - php
-          - php-mysql
-          - libapache2-mod-php
-          - php-cli
-        state: present
+    - name: Removes all anonymous user accounts
+      mysql_user:
+        name: ''
+        host_all: yes
+        state: absent
+        login_user: root
+        login_password: "{{ mysql_root_password }}"
 
-    - name: Restart Apache to apply PHP modules
-      service:
-        name: apache2
-        state: restarted
-
+    - name: Removes the MySQL test database
+      mysql_db:
+        name: test
+        state: absent
+        login_user: root
+        login_password: "{{ mysql_root_password }}"
+    
     - name: Add Google Cloud SDK apt key
       apt_key:
         url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
@@ -67,3 +76,19 @@
         name: google-cloud-sdk
         state: latest
         update_cache: yes
+  
+    - name: Sets Up PHP Info Page
+      template:
+        src: "files/info.php.j2"
+        dest: "/var/www/{{ http_host }}/info.php"
+
+  handlers:
+    - name: Reload Apache
+      service:
+        name: apache2
+        state: reloaded
+
+    - name: Restart Apache
+      service:
+        name: apache2
+        state: restarted
