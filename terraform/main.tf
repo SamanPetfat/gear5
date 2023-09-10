@@ -45,8 +45,6 @@ resource "google_compute_instance" "gear5_instance" {
   }
     
   boot_disk {
-    device_name = "gear5-staging-srv2"
-
     initialize_params {
       image = "projects/ubuntu-os-cloud/global/images/ubuntu-2004-focal-v20230907"
       size  = 15
