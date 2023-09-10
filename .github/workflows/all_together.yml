@@ -34,19 +34,20 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
     
+    - name: Set env vars for later use
+      run: |
+        echo "PROJECT_ID=${{ secrets.GCP_PROJECT_ID }}" >> $GITHUB_ENV
+        echo "SA_KEY_PATH=gcp-key.json" >> $GITHUB_ENV 
+    
+    - name: Mask sensitive data
+      run: |
+          echo "::add-mask::${{ secrets.GCP_PROJECT_ID }}"
+          echo "::add-mask::gcp-key.json"
+      
     - name: Authenticate with GCP
       uses: 'google-github-actions/auth@v1'
       with:
         credentials_json: '${{ secrets.GCP_SA_KEY }}'  
-      
-    - name: Fetch secrets 
-      env:
-          GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
-          GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
-      run: |
-          echo "$GCP_SA_KEY" > ./ansible_fredrik/gcp-key.json
-          echo "::add-mask::PROJECT_ID=$GCP_PROJECT_ID" >> $GITHUB_ENV
-          echo "::add-mask::SA_KEY_PATH=gcp-key.json" >> $GITHUB_ENV 
 
     - name: Update Inventory File
       run: |
