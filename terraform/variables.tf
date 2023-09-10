@@ -27,6 +27,6 @@ variable "compute_config" {
 
   default = {
     name = "gear5-staging-srv1"
-    type = "e2-small"
+    type = "e2-medium"
   }
 }
