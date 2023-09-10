@@ -5,7 +5,61 @@
   become: yes
 
   tasks:
-    - name: install apache2
+    - name: Update apt repo and cache on all Debian/Ubuntu boxes
+      apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
+
+    - name: Upgrade all packages on servers
+      apt: upgrade=dist force_apt_get=yes
+
+    - name: Check if a reboot is needed on all servers
+      register: reboot_required_file
+      stat: path=/var/run/reboot-required get_md5=no
+
+    - name: Reboot the box if kernel updated
+      reboot:
+        msg: "Reboot initiated by Ansible for kernel updates"
+        connect_timeout: 5
+        reboot_timeout: 300
+        pre_reboot_delay: 0
+        post_reboot_delay: 30
+        test_command: uptime
+      when: reboot_required_file.stat.exists
+
+
+    - name: Install Apache
       apt:
         name: apache2
         state: present
+
+    - name: Ensure Apache is running and enabled
+      service:
+        name: apache2
+        state: started
+        enabled: yes
+
+    - name: Install MySQL server
+      apt:
+        name: 
+          - mysql-server
+          - python3-mysqldb # This package is necessary for Ansible's mysql_db and mysql_user modules
+        state: present
+
+    - name: Ensure MySQL service is running and enabled
+      service:
+        name: mysql
+        state: started
+        enabled: yes
+
+    - name: Install PHP and related modules
+      apt:
+        name: 
+          - php
+          - php-mysql
+          - libapache2-mod-php
+          - php-cli
+        state: present
+
+    - name: Restart Apache to apply PHP modules
+      service:
+        name: apache2
+        state: restarted
