@@ -39,9 +39,20 @@ jobs:
       with:
         credentials_json: '${{ secrets.GCP_SA_KEY }}'  
     
+    - name: Mask generated GCP values
+      run: |
+        echo "::add-mask::${{ env.CLOUDSDK_AUTH_CREDENTIAL_FILE_OVERRIDE }}"
+        echo "::add-mask::${{ env.GOOGLE_APPLICATION_CREDENTIALS }}"
+        echo "::add-mask::${{ env.GOOGLE_GHA_CREDS_PATH }}"
+        echo "::add-mask::${{ env.CLOUDSDK_CORE_PROJECT }}"
+        echo "::add-mask::${{ env.CLOUDSDK_PROJECT }}"
+        echo "::add-mask::${{ env.GCLOUD_PROJECT }}"
+        echo "::add-mask::${{ env.GCP_PROJECT }}"
+        echo "::add-mask::${{ env.GOOGLE_CLOUD_PROJECT }}"    
+    
     - name: Display Updated Inventory File
       run: cat ./ansible_fredrik/misc/inventory.gcp.yml 
-      
+
     - name: Update Inventory File
       run: |
         sed -i "s|PATH_TO_SERVICE_ACCOUNT_FILE|$GOOGLE_GHA_CREDS_PATH|" ./ansible_fredrik/misc/inventory.gcp.yml
@@ -62,3 +73,4 @@ jobs:
         options: |
           --inventory misc/inventory.gcp.yml
           --verbose
+          -vvvv
