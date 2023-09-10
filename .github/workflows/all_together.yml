@@ -29,6 +29,7 @@ jobs:
           terraform apply -auto-approve
   
   ansible:
+    needs: create_staging_srv
     runs-on: ubuntu-latest
     steps:  
     - name: Checkout code
@@ -68,6 +69,7 @@ jobs:
           --inventory misc/inventory.gcp.yml
 
   tear_down_staging_srv:
+    needs: [create_staging_srv, ansible]
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
