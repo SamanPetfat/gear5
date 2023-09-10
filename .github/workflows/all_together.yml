@@ -13,11 +13,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-    
-      - name: Authenticate with GCP
-        uses: 'google-github-actions/auth@v1'
-        with:
-          credentials_json: '${{ secrets.GCP_SA_KEY }}'
       
       - name: Mask generated GCP values
         run: |
@@ -29,7 +24,18 @@ jobs:
           echo "::add-mask::${{ env.GCLOUD_PROJECT }}"
           echo "::add-mask::${{ env.GCP_PROJECT }}"
           echo "::add-mask::${{ env.GOOGLE_CLOUD_PROJECT }}" 
+          echo "::add-mask::${{ INSTANCE_IP }}"
+          echo "::add-mask::${{ INSTANCE_NAME }}"
+          echo "::add-mask::${{ INSTANCE_ZONE }}"
+          echo "::add-mask::${{ IP }}"
       
+      - name: Authenticate with GCP
+        uses: 'google-github-actions/auth@v1'
+        with:
+          credentials_json: '${{ secrets.GCP_SA_KEY }}'
+      
+
+
       - name: Terraform Initialize and Apply
         working-directory: ./terraform
         id: terraform
@@ -44,7 +50,22 @@ jobs:
     
     - name: Checkout code
       uses: actions/checkout@v4
-      
+    
+    - name: Mask generated GCP values
+      run: |
+        echo "::add-mask::${{ env.CLOUDSDK_AUTH_CREDENTIAL_FILE_OVERRIDE }}"
+        echo "::add-mask::${{ env.GOOGLE_APPLICATION_CREDENTIALS }}"
+        echo "::add-mask::${{ env.GOOGLE_GHA_CREDS_PATH }}"
+        echo "::add-mask::${{ env.CLOUDSDK_CORE_PROJECT }}"
+        echo "::add-mask::${{ env.CLOUDSDK_PROJECT }}"
+        echo "::add-mask::${{ env.GCLOUD_PROJECT }}"
+        echo "::add-mask::${{ env.GCP_PROJECT }}"
+        echo "::add-mask::${{ env.GOOGLE_CLOUD_PROJECT }}" 
+        echo "::add-mask::${{ INSTANCE_IP }}"
+        echo "::add-mask::${{ INSTANCE_NAME }}"
+        echo "::add-mask::${{ INSTANCE_ZONE }}"
+        echo "::add-mask::${{ IP }}"
+
     - name: Authenticate with GCP
       uses: 'google-github-actions/auth@v1'
       with:
@@ -72,19 +93,12 @@ jobs:
     - name: Update default.yml
       run: |
         IP=${{ steps.get_ip.outputs.ip }}
-        sed -i "s|your_domain|$IP|" ./ansible_fredrik/vars/default.yml 
+        sed -i "s|your_domain|$IP|" ./ansible_fredrik/vars/default.yml
 
-    - name: Mask generated GCP values
+    - name: Display default.yml
       run: |
-        echo "::add-mask::${{ env.CLOUDSDK_AUTH_CREDENTIAL_FILE_OVERRIDE }}"
-        echo "::add-mask::${{ env.GOOGLE_APPLICATION_CREDENTIALS }}"
-        echo "::add-mask::${{ env.GOOGLE_GHA_CREDS_PATH }}"
-        echo "::add-mask::${{ env.CLOUDSDK_CORE_PROJECT }}"
-        echo "::add-mask::${{ env.CLOUDSDK_PROJECT }}"
-        echo "::add-mask::${{ env.GCLOUD_PROJECT }}"
-        echo "::add-mask::${{ env.GCP_PROJECT }}"
-        echo "::add-mask::${{ env.GOOGLE_CLOUD_PROJECT }}"    
-
+        cat ./ansible_fredrik/vars/default.yml
+    
     - name: Update Inventory File
       run: |
         sed -i "s|PATH_TO_SERVICE_ACCOUNT_FILE|$GOOGLE_GHA_CREDS_PATH|" ./ansible_fredrik/misc/inventory.gcp.yml
