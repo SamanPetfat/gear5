@@ -1,10 +1,10 @@
 #!/bin/bash
 # gmail smtp: smtp.gmail.com:587
-RECIEVER_EMAIL_ADDRESS=""
-SENDER_EMAIL_ADDRESS=""
-SMTP_SERVER=""
-EMAIL_ADDRESS=""
-PASSWORD=""
+RECIEVER_EMAIL_ADDRESS="gear5staging@gmail.com"
+SENDER_EMAIL_ADDRESS="ear5staging@gmail.com"
+SMTP_SERVER="smtp.gmail.com:587"
+EMAIL_ADDRESS="ear5staging@gmail.com"
+PASSWORD="qwerty123456!"
 
 output=$(sleep 20 2>&1)
 command_status=$?
@@ -15,7 +15,7 @@ date=$(date)
 hostname=$(hostname)
 summary="CI/CD PIPELINE HAVE FAILED AT $date ON $hostname."
 
-GITHUB_REPO="SamanPetfat/Gear5"
+GITHUB_REPO="SamanPetfat/gear5"
 #GITHUB_TOKEN="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"
 
 PR_TITLE="Automated PR: Tests Passed"
@@ -37,12 +37,8 @@ send_mail() {
 }
 
 if [ $command_status -ne 0 ]; then
-    if [ $num_lines -le 25 ]; then
-        body_content="$output\n\nPlease check the code immediately!"
-    else
-        last_50_lines=$(echo "$output" | tail -n 50)
-        body_content="$last_50_lines\n\nSee attached log file for more.\n\nPlease check the code immediately!"
-    fi
+    last_50_lines=$(echo "$output" | tail -n 50)
+    body_content="$last_50_lines\n\nSee attached log file for more.\n\nPlease check the code immediately!"
     send_mail "$body_content"
 else
 
