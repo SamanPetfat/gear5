@@ -204,18 +204,12 @@
       when: download_result.changed
       tags: [wordpress]
 
-
-    - name: Download Backup File
-      ansible.builtin.get_url:
-        url: https://storage.googleapis.com/gear5_backup_bucket/dbbackup.tar.gz
-        dest: /var/backup/dbbackup.tar.gz
-        validate_certs: false
-
     - name: Extract Backup
       ansible.builtin.unarchive:
-        src: /var/backup/dbbackup.tar.gz
+        src: https://storage.googleapis.com/gear5_backup_bucket/dbbackup.tar.gz
         dest: /tmp/
-        copy: true
+        remote_src: true
+      tags: [mysql]
 
     - name: Import .sql database
       community.mysql.mysql_db:
