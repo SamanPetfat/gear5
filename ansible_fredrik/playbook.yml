@@ -80,14 +80,14 @@
       loop: "{{ php_modules }}"
       tags: [system]
 
-# Apache Configuration
-- name: Setup Apache
+- name: Configure Staging
   hosts: staging
   become: true
   vars_files:
     - vars/default.yml
 
   tasks:
+    # Apache Configuration
     - name: Create document root
       ansible.builtin.file:
         path: "/var/www/{{ http_host }}"
@@ -118,26 +118,8 @@
     #   ansible.builtin.shell: /usr/sbin/a2dissite 000-default.conf
     #   notify: Restart Apache
     #   tags: [apache]
-  
-  handlers:
-    - name: Reload Apache
-      ansible.builtin.service:
-        name: apache2
-        state: reloaded
 
-    - name: Restart Apache
-      ansible.builtin.service:
-        name: apache2
-        state: restarted
-
-# MySQL Configuration
-- name: Setup MySQL
-  hosts: staging
-  become: true
-  vars_files:
-    - vars/default.yml
-
-  tasks:
+    # MySQL Configuration
     - name: Ensure .my.cnf for root is present
       ansible.builtin.template:
         src: files/my.cnf.j2
@@ -154,6 +136,14 @@
       check_mode: true
       register: root_password_check
       failed_when: false
+      tags: [mysql, mysql-root]
+
+    - name: Set the root password
+      community.mysql.mysql_user:
+        name: root
+        password: "{{ mysql_root_password }}"
+        login_unix_socket: /var/run/mysqld/mysqld.sock
+      when: root_password_check.changed
       tags: [mysql, mysql-root]
 
     - name: Remove all anonymous user accounts
@@ -191,39 +181,7 @@
         login_password: "{{ mysql_root_password }}"
       tags: [mysql]
 
-  handlers:
-    - name: Set the root password
-      community.mysql.mysql_user:
-        name: root
-        password: "{{ mysql_root_password }}"
-        login_unix_socket: /var/run/mysqld/mysqld.sock
-      when: root_password_check.changed
-      tags: [mysql, mysql-root]
-
-    - name: Extract Backup
-      ansible.builtin.unarchive:
-        src: https://storage.googleapis.com/gear5_backup_bucket/dbbackup.tar.gz
-        dest: /tmp/
-        remote_src: true
-      when: symlink_result.changed
-      register: extract_result
-      tags: [mysql]
-
-    - name: Import .sql database
-      community.mysql.mysql_db:
-        name: "{{ mysql_db }}"
-        state: import
-        target: /tmp/wordpress.bak.sql
-      when: extract_result.changed
-
-# WordPress Configuration
-- name: Setup WordPress
-  hosts: staging
-  become: true
-  vars_files:
-    - vars/default.yml
-
-  tasks:
+    # WordPress Configuration
     - name: Download and unpack latest WordPress
       ansible.builtin.unarchive:
         src: https://wordpress.org/latest.tar.gz
@@ -264,17 +222,14 @@
         recurse: true
         owner: www-data
         group: www-data
-      when: download_result.changed
       tags: [wordpress]
 
     - name: Set permissions for directories
       ansible.builtin.shell: "/usr/bin/find /var/www/{{ http_host }}/wordpress/ -type d -exec chmod 777 {} \\;"
-      when: download_result.changed
       tags: [wordpress]
 
     - name: Set permissions for files
       ansible.builtin.shell: "/usr/bin/find /var/www/{{ http_host }}/wordpress/ -type f -exec chmod 777 {} \\;"
-      when: download_result.changed
       tags: [wordpress]
 
     - name: Set up wp-config
@@ -299,22 +254,6 @@
       register: plugins_result
       tags: [wordpress]
 
-    - name: Remove folder (Themes)
-      ansible.builtin.file:
-        path: "/var/www/{{ http_host }}/wordpress/wp-content/themes"
-        state: absent
-      when: download_result.changed
-      register: themes_result
-      tags: [wordpress]
-
-    - name: Remove folder (Uploads)
-      ansible.builtin.file:
-        path: "/var/www/{{ http_host }}/wordpress/wp-content/themes"
-        state: absent
-      when: download_result.changed
-      register: uploads_result
-      tags: [wordpress]
-
     - name: Create a symbolic link (Plugins)
       ansible.builtin.file:
         src: "/home/runner/gear5/www/html/wp-content/plugins"
@@ -323,6 +262,12 @@
         group: www-data
         state: link
       when: plugins_result.changed
+      tags: [wordpress]
+
+    - name: Remove folder (Themes)
+      ansible.builtin.file:
+        path: "/var/www/{{ http_host }}/wordpress/wp-content/themes"
+        state: absent
       tags: [wordpress]
 
     - name: Create a symbolic link (Themes)
@@ -345,13 +290,62 @@
       when: uploads_result.changed
       tags: [wordpress]
 
+    - name: Create a symbolic link (Wordpress)
+      ansible.builtin.file:
+        src: "/var/www/{{ http_host }}/wordpress"
+        dest: "/var/www/html"
+        owner: www-data
+        group: www-data
+        state: link
+      tags: [wordpress]
+
+    - name: Extract Backup
+      ansible.builtin.unarchive:
+        src: https://storage.googleapis.com/gear5_backup_bucket/dbbackup.tar.gz
+        dest: /tmp/
+        remote_src: true
+      tags: [mysql]
+
+    - name: Update WordPress URLs in the database dump (HTTP)
+      ansible.builtin.replace:
+        path: /tmp/wordpress.bak.sql
+        regexp: "http://gear5.online"
+        replace: "http://{{ lookup('env', 'INSTANCE_IP') }}"
+
+    - name: Update WordPress URLs in the database dump (HTTPS)
+      ansible.builtin.replace:
+        path: /tmp/wordpress.bak.sql
+        regexp: "https://gear5.online"
+        replace: "https://{{ lookup('env', 'INSTANCE_IP') }}"
+      tags: [wordpress]
+
+    - name: Import .sql database
+      community.mysql.mysql_db:
+        name: "{{ mysql_db }}"
+        state: import
+        target: /tmp/wordpress.bak.sql
+
+  handlers:
+    - name: Reload Apache
+      ansible.builtin.service:
+        name: apache2
+        state: reloaded
+
+    - name: Restart Apache
+      ansible.builtin.service:
+        name: apache2
+        state: restarted
+
+
 - name: Run tests
   hosts: staging
   become: true
   vars:
-    - GITHUB_TOKEN: "{{ lookup('env', 'GITHUB_TOKEN') }}"
+    GITHUB_TOKEN: "{{ lookup('env', 'GITHUB_TOKEN') }}"
   tasks:
     - name: Run tests
-      ansible.builtin.command:
+      ansible.builtin.shell:
         cmd: "cd /home/runner/gear5 && ./smtp.sh"
       tags: [tests]
+
+
