@@ -218,7 +218,7 @@
 
     - name: Import .sql database
       community.mysql.mysql_db:
-        name: "{{ wp_mysql_db }}"
+        name: "{{ mysql_db }}"
         state: import
         target: /tmp/wordpress.bak.sql
 
