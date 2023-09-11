@@ -275,6 +275,7 @@
         owner: www-data
         group: www-data
         state: link
+      when: download_result.changed
       tags: [wordpress]
 
     - name: Create a symbolic link (Wordpress)
