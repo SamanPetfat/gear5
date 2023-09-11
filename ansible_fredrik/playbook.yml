@@ -43,7 +43,7 @@
       ansible.builtin.git:
         repo: https://x-access-token:{{ lookup('env', 'GITHUB_TOKEN') }}@github.com/SamanPetfat/gear5.git
         dest: /home/runner/gear5
-        version: main
+        version: staging
 
 - name: Install prerequisites
   hosts: staging
