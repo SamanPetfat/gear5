@@ -80,14 +80,14 @@
       loop: "{{ php_modules }}"
       tags: [system]
 
-# Apache Configuration
-- name: Setup Apache
+- name: Configure Staging
   hosts: staging
   become: true
   vars_files:
     - vars/default.yml
 
   tasks:
+    # Apache Configuration
     - name: Create document root
       ansible.builtin.file:
         path: "/var/www/{{ http_host }}"
@@ -118,26 +118,8 @@
     #   ansible.builtin.shell: /usr/sbin/a2dissite 000-default.conf
     #   notify: Restart Apache
     #   tags: [apache]
-  
-  handlers:
-    - name: Reload Apache
-      ansible.builtin.service:
-        name: apache2
-        state: reloaded
 
-    - name: Restart Apache
-      ansible.builtin.service:
-        name: apache2
-        state: restarted
-
-# MySQL Configuration
-- name: Setup MySQL
-  hosts: staging
-  become: true
-  vars_files:
-    - vars/default.yml
-
-  tasks:
+    # MySQL Configuration
     - name: Ensure .my.cnf for root is present
       ansible.builtin.template:
         src: files/my.cnf.j2
@@ -199,7 +181,7 @@
         login_password: "{{ mysql_root_password }}"
       tags: [mysql]
 
-# WordPress Configuration
+    # WordPress Configuration
     - name: Download and unpack latest WordPress
       ansible.builtin.unarchive:
         src: https://wordpress.org/latest.tar.gz
@@ -313,15 +295,26 @@
         state: import
         target: /tmp/wordpress.bak.sql
 
+  handlers:
+    - name: Reload Apache
+      ansible.builtin.service:
+        name: apache2
+        state: reloaded
+
+    - name: Restart Apache
+      ansible.builtin.service:
+        name: apache2
+        state: restarted
+
 
 - name: Run tests
   hosts: staging
   become: true
   vars:
-    - GITHUB_TOKEN: "{{ lookup('env', 'GITHUB_TOKEN') }}"
+    GITHUB_TOKEN: "{{ lookup('env', 'GITHUB_TOKEN') }}"
   tasks:
     - name: Run tests
-      ansible.builtin.command:
+      ansible.builtin.shell:
         cmd: "cd /home/runner/gear5 && ./smtp.sh"
       tags: [tests]
 
