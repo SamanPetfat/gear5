@@ -10,6 +10,20 @@
         update_cache: true
         cache_valid_time: 86400
 
+- name: Add Google Cloud SDK key
+  hosts: staging
+  become: true
+  tasks:
+    - name: Add Google Cloud SDK apt key
+      ansible.builtin.apt_key:
+        url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+        state: present
+    
+    - name: Add Google Cloud SDK apt repository
+      ansible.builtin.apt_repository:
+        repo: "deb http://packages.cloud.google.com/apt cloud-sdk main"
+        state: present
+
 - name: Clone repository
   hosts: staging
   become: true
@@ -48,6 +62,7 @@
         - php
         - php-mysql
         - libapache2-mod-php
+        - google-cloud-sdk
       tags: [system]
 
     - name: Install PHP Extensions
@@ -159,6 +174,7 @@
         dest: "/var/www/{{ http_host }}"
         remote_src: true
         creates: "/var/www/{{ http_host }}/wordpress"
+      register: download_result
       tags: [wordpress]
 
     - name: Set ownership
@@ -168,35 +184,25 @@
         recurse: true
         owner: www-data
         group: www-data
+      when: download_result.changed
       tags: [wordpress]
 
     - name: Set permissions for directories
       ansible.builtin.shell: "/usr/bin/find /var/www/{{ http_host }}/wordpress/ -type d -exec chmod 750 {} \\;"
+      when: download_result.changed
       tags: [wordpress]
 
     - name: Set permissions for files
       ansible.builtin.shell: "/usr/bin/find /var/www/{{ http_host }}/wordpress/ -type f -exec chmod 640 {} \\;"
+      when: download_result.changed
       tags: [wordpress]
 
     - name: Set up wp-config
       ansible.builtin.template:
         src: "files/wp-config.php.j2"
         dest: "/var/www/{{ http_host }}/wordpress/wp-config.php"
+      when: download_result.changed
       tags: [wordpress]
-
-    - name: Add Google Cloud SDK apt key
-      ansible.builtin.apt_key:
-        url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
-        state: present
-
-    - name: Add Google Cloud SDK apt repository
-      ansible.builtin.apt_repository:
-        repo: "deb http://packages.cloud.google.com/apt cloud-sdk main"
-        state: present
-
-    - name: Install Google Cloud SDK
-      ansible.builtin.apt:
-        name: google-cloud-sdk
 
   handlers:
     - name: Reload Apache
