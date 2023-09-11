@@ -216,6 +216,12 @@
         remote_src: true
       tags: [mysql]
 
+    - name: Update WordPress URLs in the database dump
+      ansible.builtin.shell: |
+        sed -i 's|http://gear5.online%7Chttp://{{ lookup('env', 'INSTANCE_IP') }}%7Cg' /tmp/wordpress.bak.sql
+      become: yes
+      delegate_to: my_server
+
     - name: Import .sql database
       community.mysql.mysql_db:
         name: "{{ mysql_db }}"

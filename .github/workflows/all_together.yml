@@ -90,13 +90,13 @@ jobs:
 
         echo "instance_name=$INSTANCE_NAME" >> $GITHUB_OUTPUT
         echo "instance_zone=$INSTANCE_ZONE" >> $GITHUB_OUTPUT
-        echo "ip=$INSTANCE_IP" >> $GITHUB_OUTPUT
-        echo "hostname=$INSTANCE_HOSTNAME" >> $GITHUB_OUTPUT
+        echo "insance_ip=$INSTANCE_IP" >> $GITHUB_OUTPUT
+        echo "instance_hostname=$INSTANCE_HOSTNAME" >> $GITHUB_OUTPUT
 
     - name: Update default.yml
       run: |
-        HOSTNAME=${{ steps.fetch_instance_details.outputs.hostname }}
-        sed -i "s|your_domain|$HOSTNAME|" ./ansible_fredrik/vars/default.yml
+        HOSTNAME=${{ steps.fetch_instance_details.outputs.instance_hostname }}
+        sed -i "s|your_domain|$INSTANCE_HOSTNAME|" ./ansible_fredrik/vars/default.yml
 
     - name: Update Inventory File
       run: |
@@ -110,6 +110,7 @@ jobs:
     - name: Run playbook
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        INSTANCE_IP: ${{ steps.fetch_instance_details.outputs.instance_ip }}
       uses: dawidd6/action-ansible-playbook@v2
       with:
         playbook: playbook.yml
