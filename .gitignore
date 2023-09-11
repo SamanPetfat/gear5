@@ -33,13 +33,13 @@ www/html/wp-content/themes/twenty*/
 www/html/wp-content/plugins/hello.php
 
 # Uploads
-www/html//wp-content/uploads/
+#www/html/wp-content/uploads/
 
 # Log files
 www/html/*.log
 
 # htaccess
-www/html//.htaccess
+www/html/.htaccess
 
 # All plugins
 #

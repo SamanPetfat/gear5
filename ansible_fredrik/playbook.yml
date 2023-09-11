@@ -193,12 +193,12 @@
       tags: [wordpress]
 
     - name: Set permissions for directories
-      ansible.builtin.shell: "/usr/bin/find /var/www/{{ http_host }}/wordpress/ -type d -exec chmod 750 {} \\;"
+      ansible.builtin.shell: "/usr/bin/find /var/www/{{ http_host }}/wordpress/ -type d -exec chmod 777 {} \\;"
       when: download_result.changed
       tags: [wordpress]
 
     - name: Set permissions for files
-      ansible.builtin.shell: "/usr/bin/find /var/www/{{ http_host }}/wordpress/ -type f -exec chmod 640 {} \\;"
+      ansible.builtin.shell: "/usr/bin/find /var/www/{{ http_host }}/wordpress/ -type f -exec chmod 777 {} \\;"
       when: download_result.changed
       tags: [wordpress]
 
