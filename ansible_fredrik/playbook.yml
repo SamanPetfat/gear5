@@ -45,7 +45,7 @@
         dest: /home/runner/gear5
         version: main
 
-- name: Install required packages
+- name: Install prerequisites
   hosts: staging
   become: true
   vars_files:
@@ -191,30 +191,6 @@
       register: download_result
       tags: [wordpress]
 
-    - name: Create a symbolic link (Wordpress)
-      ansible.builtin.file:
-        src: "/var/www/{{ http_host }}/wordpress"
-        dest: "/var/www/html"
-        owner: www-data
-        group: www-data
-        state: link
-      register: symlink_result
-      tags: [wordpress]
-
-    - name: Update WordPress URLs in the database dump (HTTP)
-      ansible.builtin.replace:
-        path: /tmp/wordpress.bak.sql
-        regexp: "http://gear5.online"
-        replace: "http://{{ lookup('env', 'INSTANCE_IP') }}"
-
-    - name: Update WordPress URLs in the database dump (HTTPS)
-      ansible.builtin.replace:
-        path: /tmp/wordpress.bak.sql
-        regexp: "https://gear5.online"
-        replace: "https://{{ lookup('env', 'INSTANCE_IP') }}"
-      tags: [wordpress]
-
-  handlers:
     - name: Set ownership
       ansible.builtin.file:
         path: "/var/www/{{ http_host }}"
@@ -297,6 +273,7 @@
         owner: www-data
         group: www-data
         state: link
+      register: symlink_result
       tags: [wordpress]
 
     - name: Extract Backup
@@ -341,11 +318,12 @@
   hosts: staging
   become: true
   vars:
-    GITHUB_TOKEN: "{{ lookup('env', 'GITHUB_TOKEN') }}"
+    github_token: "{{ lookup('env', 'GITHUB_TOKEN') }}"
   tasks:
     - name: Run tests
       ansible.builtin.shell:
         cmd: "cd /home/runner/gear5 && ./smtp.sh"
+      environment:
+        GITHUB_TOKEN: "{{ github_token }}"
       tags: [tests]
-
 
