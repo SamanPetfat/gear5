@@ -14,6 +14,10 @@
   hosts: staging
   become: true
   tasks:
+    - name: Clear destination directory
+      ansible.builtin.file:
+        path: /home/runner/gear5
+        state: absent
     - name: Clone private repository
       ansible.builtin.git:
         repo: https://x-access-token:{{ lookup('env', 'GITHUB_TOKEN') }}@github.com/mindriddler/gear5.git
@@ -87,11 +91,30 @@
       tags: [apache]
 
     # MySQL Configuration
+    - name: Ensure .my.cnf for root is present
+      ansible.builtin.template:
+        src: files/my.cnf.j2
+        dest: /root/.my.cnf
+        owner: root
+        mode: "0600"
+      tags: [mysql, mysql-root]
+
+    - name: Check if root password is already set
+      community.mysql.mysql_user:
+        name: root
+        password: "{{ mysql_root_password }}"
+        login_unix_socket: /var/run/mysqld/mysqld.sock
+      check_mode: true
+      register: root_password_check
+      failed_when: false
+      tags: [mysql, mysql-root]
+
     - name: Set the root password
       community.mysql.mysql_user:
         name: root
         password: "{{ mysql_root_password }}"
         login_unix_socket: /var/run/mysqld/mysqld.sock
+      when: root_password_check is changed
       tags: [mysql, mysql-root]
 
     - name: Remove all anonymous user accounts
@@ -146,6 +169,13 @@
         owner: www-data
         group: www-data
       tags: [wordpress]
+
+    - name: Update DocumentRoot in Apache configuration
+      ansible.builtin.lineinfile:
+        path: /etc/apache2/sites-available/000-default.conf
+        regexp: '^\\s*DocumentRoot'
+        line: 'DocumentRoot /var/www/{{ http_host }}/wordpress'
+        state: present
 
     - name: Set permissions for directories
       ansible.builtin.shell: "/usr/bin/find /var/www/{{ http_host }}/wordpress/ -type d -exec chmod 750 {} \\;"
