@@ -10,19 +10,16 @@
         update_cache: true
         cache_valid_time: 86400
 
-- name: Copy repository
+- name: Clone repository
   hosts: staging
   become: true
-
   tasks:
-    - name: Copy repository from control to remote
-      ansible.builtin.copy:
-        src: /home/runner/work/gear5/gear5/
-        dest: /home/
-        directory_mode: true
-        remote_src: false
-
-
+    - name: Clone private repository
+      ansible.builtin.git:
+        repo: https://x-access-token:{{ lookup('env', 'GITHUB_TOKEN') }}@github.com/mindriddler/gear5.git
+        dest: /home/runner/
+        version: main
+ 
 - name: Install required packages
   hosts: staging
   become: true

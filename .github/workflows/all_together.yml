@@ -106,8 +106,10 @@ jobs:
     - name: Install dependencies
       run: |
         /opt/pipx/venvs/ansible-core/bin/python -m pip install google-auth requests
-
+        
     - name: Run playbook
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       uses: dawidd6/action-ansible-playbook@v2
       with:
         playbook: playbook.yml
