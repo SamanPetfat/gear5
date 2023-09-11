@@ -217,11 +217,11 @@
       tags: [mysql]
 
     - name: Update WordPress URLs in the database dump
-      ansible.builtin.shell: sed -i "s|http://gear5.online|http://{{ lookup('env', 'INSTANCE_IP') }}|" /tmp/wordpress.bak.sql
+      ansible.builtin.shell: sed -i "s|http://gear5.online|http://{{ lookup('env', 'INSTANCE_IP') }}|g" /tmp/wordpress.bak.sql
       tags: [wordpress]
     
     - name: Update WordPress URLs in the database dump
-      ansible.builtin.shell: sed -i "s|https://gear5.online|https://{{ lookup('env', 'INSTANCE_IP') }}|" /tmp/wordpress.bak.sql
+      ansible.builtin.shell: sed -i "s|https://gear5.online|https://{{ lookup('env', 'INSTANCE_IP') }}|g" /tmp/wordpress.bak.sql
       tags: [wordpress]
     
     - name: Import .sql database
