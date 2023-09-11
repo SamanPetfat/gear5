@@ -1,12 +1,12 @@
 #!/bin/bash
 # gmail smtp: smtp.gmail.com:587
 RECIEVER_EMAIL_ADDRESS="gear5staging@gmail.com"
-SENDER_EMAIL_ADDRESS="ear5staging@gmail.com"
+SENDER_EMAIL_ADDRESS="gear5staging@gmail.com"
 SMTP_SERVER="smtp.gmail.com:587"
-EMAIL_ADDRESS="ear5staging@gmail.com"
+EMAIL_ADDRESS="gear5staging@gmail.com"
 PASSWORD="qwerty123456!"
 
-output=$(sleep 20 2>&1)
+output=$(echo "hello" 2>&1)
 command_status=$?
 output_file="/tmp/$(hostname)_output.log"
 echo "$output" >"$output_file"
