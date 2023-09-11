@@ -191,6 +191,30 @@
       register: download_result
       tags: [wordpress]
 
+    - name: Create a symbolic link (Wordpress)
+      ansible.builtin.file:
+        src: "/var/www/{{ http_host }}/wordpress"
+        dest: "/var/www/html"
+        owner: www-data
+        group: www-data
+        state: link
+      register: symlink_result
+      tags: [wordpress]
+
+    - name: Update WordPress URLs in the database dump (HTTP)
+      ansible.builtin.replace:
+        path: /tmp/wordpress.bak.sql
+        regexp: "http://gear5.online"
+        replace: "http://{{ lookup('env', 'INSTANCE_IP') }}"
+
+    - name: Update WordPress URLs in the database dump (HTTPS)
+      ansible.builtin.replace:
+        path: /tmp/wordpress.bak.sql
+        regexp: "https://gear5.online"
+        replace: "https://{{ lookup('env', 'INSTANCE_IP') }}"
+      tags: [wordpress]
+
+  handlers:
     - name: Set ownership
       ansible.builtin.file:
         path: "/var/www/{{ http_host }}"
@@ -219,12 +243,15 @@
       ansible.builtin.file:
         path: "/var/www/html/index.html"
         state: absent
+      when: download_result.changed
       tags: [wordpress]
 
     - name: Remove folder (Plugins)
       ansible.builtin.file:
         path: "/var/www/{{ http_host }}/wordpress/wp-content/plugins"
         state: absent
+      when: download_result.changed
+      register: plugins_result
       tags: [wordpress]
 
     - name: Create a symbolic link (Plugins)
@@ -234,6 +261,7 @@
         owner: www-data
         group: www-data
         state: link
+      when: plugins_result.changed
       tags: [wordpress]
 
     - name: Remove folder (Themes)
@@ -249,6 +277,7 @@
         owner: www-data
         group: www-data
         state: link
+      when: themes_result.changed
       tags: [wordpress]
 
     - name: Create a symbolic link (Uploads)
@@ -258,6 +287,7 @@
         owner: www-data
         group: www-data
         state: link
+      when: uploads_result.changed
       tags: [wordpress]
 
     - name: Create a symbolic link (Wordpress)
