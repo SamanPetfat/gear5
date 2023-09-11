@@ -328,16 +328,8 @@
 - name: Run tests
   hosts: staging
   become: true
-  vars:
-    github_token: "{{ lookup('env', 'GITHUB_TOKEN') }}"
 
   tasks:
-    - name: Chmod tests.sh
-      ansible.builtin.file:
-        path: /home/runner/gear5/tests.sh
-        mode: "0777"
-      tags: [tests]
-
     - name: Run tests
       ansible.builtin.shell:
         cmd: "cd /home/runner/gear5 && ./tests.sh"
