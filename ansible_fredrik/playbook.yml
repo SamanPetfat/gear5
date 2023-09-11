@@ -1,29 +1,29 @@
 ---
-- name: Update
-  hosts: staging
-  become: true
+#- name: Update
+#  hosts: staging
+#  become: true
 
-  tasks:
-    - name: Update and upgrade apt packages
-      ansible.builtin.apt:
-        upgrade: true
-        update_cache: true
-        cache_valid_time: 86400
+#  tasks:
+    #- name: Update and upgrade apt packages
+    #  ansible.builtin.apt:
+    #    upgrade: true
+    #    update_cache: true
+    #    cache_valid_time: 86400
 
-- name: Add Google Cloud SDK key
-  hosts: staging
-  become: true
+#- name: Add Google Cloud SDK key
+#  hosts: staging
+#  become: true
 
-  tasks:
-    - name: Add Google Cloud SDK apt key
-      ansible.builtin.apt_key:
-        url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
-        state: present
+#  tasks:
+#    - name: Add Google Cloud SDK apt key
+#      ansible.builtin.apt_key:
+#        url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+#        state: present
 
-    - name: Add Google Cloud SDK apt repository
-      ansible.builtin.apt_repository:
-        repo: "deb http://packages.cloud.google.com/apt cloud-sdk main"
-        state: present
+#    - name: Add Google Cloud SDK apt repository
+#      ansible.builtin.apt_repository:
+#        repo: "deb http://packages.cloud.google.com/apt cloud-sdk main"
+#        state: present
 
     # - name: Install Google Cloud SDK
     #   ansible.builtin.apt:
@@ -52,31 +52,31 @@
     - vars/default.yml
 
   tasks:
-    - name: Install prerequisites
-      ansible.builtin.apt:
-        name: aptitude
-        state: present
-      tags: [system]
+    #- name: Install prerequisites
+    #  ansible.builtin.apt:
+    #    name: aptitude
+    #    state: present
+    #  tags: [system]
 
-    - name: Install LAMP packages
-      ansible.builtin.apt:
-        name: "{{ item }}"
-        state: present
-      loop:
-        - apache2
-        - mysql-server
-        - python3-pymysql
-        - php
-        - php-mysql
-        - libapache2-mod-php
-      tags: [system]
+    #- name: Install LAMP packages
+    #  ansible.builtin.apt:
+    #    name: "{{ item }}"
+    #    state: present
+    #  loop:
+    #    - apache2
+    #    - mysql-server
+    #    - python3-pymysql
+    #    - php
+    #    - php-mysql
+    #    - libapache2-mod-php
+    #  tags: [system]
 
-    - name: Install PHP Extensions
-      ansible.builtin.apt:
-        name: "{{ item }}"
-        state: present
-      loop: "{{ php_modules }}"
-      tags: [system]
+    #- name: Install PHP Extensions
+    #  ansible.builtin.apt:
+    #    name: "{{ item }}"
+    #    state: present
+    #  loop: "{{ php_modules }}"
+    #  tags: [system]
 
     # Apache Configuration
     - name: Create document root
@@ -216,8 +216,8 @@
     
     - name: Create a symbolic link
       ansible.builtin.file:
-        src: "/var/www/html"
-        dest: "/var/www/{{ http_host }}/wordpress"
+        src: "/var/www/{{ http_host }}/wordpress"
+        dest: "/var/www/html"
         owner: www-data
         group: www-data
         state: link
