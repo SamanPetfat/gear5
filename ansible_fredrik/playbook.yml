@@ -1,29 +1,29 @@
 ---
-- name: Update
-  hosts: staging
-  become: true
+#- name: Update
+#  hosts: staging
+#  become: true
 
-  tasks:
-    - name: Update and upgrade apt packages
-      ansible.builtin.apt:
-        upgrade: true
-        update_cache: true
-        cache_valid_time: 86400
+#  tasks:
+    #- name: Update and upgrade apt packages
+    #  ansible.builtin.apt:
+    #    upgrade: true
+    #    update_cache: true
+    #    cache_valid_time: 86400
 
-- name: Add Google Cloud SDK key
-  hosts: staging
-  become: true
+#- name: Add Google Cloud SDK key
+#  hosts: staging
+#  become: true
 
-  tasks:
-    - name: Add Google Cloud SDK apt key
-      ansible.builtin.apt_key:
-        url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
-        state: present
+#  tasks:
+#    - name: Add Google Cloud SDK apt key
+#      ansible.builtin.apt_key:
+#        url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+#        state: present
 
-    - name: Add Google Cloud SDK apt repository
-      ansible.builtin.apt_repository:
-        repo: "deb http://packages.cloud.google.com/apt cloud-sdk main"
-        state: present
+#    - name: Add Google Cloud SDK apt repository
+#      ansible.builtin.apt_repository:
+#        repo: "deb http://packages.cloud.google.com/apt cloud-sdk main"
+#        state: present
 
     # - name: Install Google Cloud SDK
     #   ansible.builtin.apt:
@@ -52,31 +52,31 @@
     - vars/default.yml
 
   tasks:
-    - name: Install prerequisites
-      ansible.builtin.apt:
-        name: aptitude
-        state: present
-      tags: [system]
+    #- name: Install prerequisites
+    #  ansible.builtin.apt:
+    #    name: aptitude
+    #    state: present
+    #  tags: [system]
 
-    - name: Install LAMP packages
-      ansible.builtin.apt:
-        name: "{{ item }}"
-        state: present
-      loop:
-        - apache2
-        - mysql-server
-        - python3-pymysql
-        - php
-        - php-mysql
-        - libapache2-mod-php
-      tags: [system]
+    #- name: Install LAMP packages
+    #  ansible.builtin.apt:
+    #    name: "{{ item }}"
+    #    state: present
+    #  loop:
+    #    - apache2
+    #    - mysql-server
+    #    - python3-pymysql
+    #    - php
+    #    - php-mysql
+    #    - libapache2-mod-php
+    #  tags: [system]
 
-    - name: Install PHP Extensions
-      ansible.builtin.apt:
-        name: "{{ item }}"
-        state: present
-      loop: "{{ php_modules }}"
-      tags: [system]
+    #- name: Install PHP Extensions
+    #  ansible.builtin.apt:
+    #    name: "{{ item }}"
+    #    state: present
+    #  loop: "{{ php_modules }}"
+    #  tags: [system]
 
     # Apache Configuration
     - name: Create document root
@@ -100,15 +100,15 @@
       notify: Reload Apache
       tags: [apache]
 
-    - name: Enable new site
-      ansible.builtin.shell: /usr/sbin/a2ensite {{ http_conf }}
-      notify: Reload Apache
-      tags: [apache]
+    #- name: Enable new site
+    #  ansible.builtin.shell: /usr/sbin/a2ensite {{ http_conf }}
+    #  notify: Reload Apache
+    #  tags: [apache]
 
-    - name: Disable default Apache site
-      ansible.builtin.shell: /usr/sbin/a2dissite 000-default.conf
-      notify: Restart Apache
-      tags: [apache]
+    #- name: Disable default Apache site
+    #  ansible.builtin.shell: /usr/sbin/a2dissite 000-default.conf
+    #  notify: Restart Apache
+    #  tags: [apache]
 
     # MySQL Configuration
     - name: Ensure .my.cnf for root is present
@@ -209,6 +209,19 @@
       when: download_result.changed
       tags: [wordpress]
 
+    - name: Remove file
+      ansible.builtin.file:
+        path: "/var/www/html/index.html"
+        state: absent
+    
+    - name: Create a symbolic link
+      ansible.builtin.file:
+        src: "/var/www/{{ http_host }}/wordpress"
+        dest: "/var/www/html"
+        owner: www-data
+        group: www-data
+        state: link
+      
     - name: Extract Backup
       ansible.builtin.unarchive:
         src: https://storage.googleapis.com/gear5_backup_bucket/dbbackup.tar.gz
@@ -217,11 +230,13 @@
       tags: [mysql]
 
     - name: Update WordPress URLs in the database dump
-      ansible.builtin.shell: |
-        sed -i 's|http://gear5.online%7Chttp://{{ lookup('env', 'INSTANCE_IP') }}%7Cg' /tmp/wordpress.bak.sql
-      become: yes
-      delegate_to: my_server
-
+      ansible.builtin.shell: sed -i "s|http://gear5.online|http://{{ lookup('env', 'INSTANCE_IP') }}|g" /tmp/wordpress.bak.sql
+      tags: [wordpress]
+    
+    - name: Update WordPress URLs in the database dump
+      ansible.builtin.shell: sed -i "s|https://gear5.online|https://{{ lookup('env', 'INSTANCE_IP') }}|g" /tmp/wordpress.bak.sql
+      tags: [wordpress]
+    
     - name: Import .sql database
       community.mysql.mysql_db:
         name: "{{ mysql_db }}"
