@@ -13,6 +13,7 @@
 - name: Add Google Cloud SDK key
   hosts: staging
   become: true
+
   tasks:
     - name: Add Google Cloud SDK apt key
       ansible.builtin.apt_key:
@@ -32,6 +33,7 @@
 - name: Clone repository
   hosts: staging
   become: true
+
   tasks:
     - name: Clear destination directory
       ansible.builtin.file:
@@ -75,7 +77,6 @@
         state: present
       loop: "{{ php_modules }}"
       tags: [system]
-
 
     # Apache Configuration
     - name: Create document root
