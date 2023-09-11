@@ -17,9 +17,9 @@
     - name: Clone private repository
       ansible.builtin.git:
         repo: https://x-access-token:{{ lookup('env', 'GITHUB_TOKEN') }}@github.com/mindriddler/gear5.git
-        dest: /home/runner/
+        dest: /home/runner/gear5
         version: main
- 
+
 - name: Install required packages
   hosts: staging
   become: true
