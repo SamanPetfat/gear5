@@ -156,7 +156,7 @@
     - name: Download and unpack latest WordPress
       ansible.builtin.unarchive:
         src: https://wordpress.org/latest.tar.gz
-        dest: "/var/www"
+        dest: "/var/www/{{ http_host }}"
         remote_src: true
         creates: "/var/www/{{ http_host }}"
       tags: [wordpress]
