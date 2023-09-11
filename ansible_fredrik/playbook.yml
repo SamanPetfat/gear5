@@ -204,6 +204,25 @@
       when: download_result.changed
       tags: [wordpress]
 
+
+    - name: Download Backup File
+      ansible.buildin.get_url:
+        url: https://storage.googleapis.com/gear5_backup_bucket/dbbackup.tar.gz
+        dest: /var/backup/dbbackup.tar.gz
+        validate_certs: no
+
+    - name: Extract Backup
+      ansible.builtin.unarchive:
+        src: /var/backup/dbbackup.tar.gz
+        dest: /tmp/
+        copy: no
+    
+    - name: Import .sql database
+      community.mysql.mysql_db:
+        name: "{{ wp_mysql_db }}"
+        state: import
+        target: /tmp/wordpress.bak.sql
+  
   handlers:
     - name: Reload Apache
       ansible.builtin.service:
