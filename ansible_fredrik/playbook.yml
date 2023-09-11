@@ -171,11 +171,11 @@
       tags: [wordpress]
 
     - name: Update DocumentRoot in Apache configuration
-      ansible.builtin.lineinfile:
+      ansible.builtin.replace:
         path: /etc/apache2/sites-available/000-default.conf
-        regexp: '^\\s*DocumentRoot'
-        line: 'DocumentRoot /var/www/{{ http_host }}/wordpress'
-        state: present
+        regexp: '^\s*DocumentRoot.*$'
+        replace: '        DocumentRoot /var/www/{{ http_host }}/wordpress'
+
 
     - name: Set permissions for directories
       ansible.builtin.shell: "/usr/bin/find /var/www/{{ http_host }}/wordpress/ -type d -exec chmod 750 {} \\;"
