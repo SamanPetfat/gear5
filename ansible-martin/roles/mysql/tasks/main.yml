@@ -6,6 +6,7 @@
     state: present
   become: yes
 
+# Ändring för test
 - name: Create MySQL user
   mysql_user:
     name: "{{ wp_mysql_user }}"
