@@ -156,9 +156,9 @@
     - name: Download and unpack latest WordPress
       ansible.builtin.unarchive:
         src: https://wordpress.org/latest.tar.gz
-        dest: "/var/www/{{ http_host }}"
+        dest: "/var/www"
         remote_src: true
-        creates: "/var/www"
+        creates: "/var/www/{{ http_host }}"
       tags: [wordpress]
 
     - name: Set ownership
@@ -178,17 +178,17 @@
 
 
     - name: Set permissions for directories
-      ansible.builtin.shell: "/usr/bin/find /var/www/{{ http_host }}/wordpress/ -type d -exec chmod 750 {} \\;"
+      ansible.builtin.shell: "/usr/bin/find /var/www/{{ http_host }}/ -type d -exec chmod 750 {} \\;"
       tags: [wordpress]
 
     - name: Set permissions for files
-      ansible.builtin.shell: "/usr/bin/find /var/www/{{ http_host }}/wordpress/ -type f -exec chmod 640 {} \\;"
+      ansible.builtin.shell: "/usr/bin/find /var/www/{{ http_host }}/ -type f -exec chmod 640 {} \\;"
       tags: [wordpress]
 
     - name: Set up wp-config
       ansible.builtin.template:
         src: "files/wp-config.php.j2"
-        dest: "/var/www/{{ http_host }}/wordpress/wp-config.php"
+        dest: "/var/www/{{ http_host }}/wp-config.php"
       tags: [wordpress]
 
     - name: Add Google Cloud SDK apt key
