@@ -156,6 +156,14 @@
       failed_when: false
       tags: [mysql, mysql-root]
 
+    - name: Set the root password
+      community.mysql.mysql_user:
+        name: root
+        password: "{{ mysql_root_password }}"
+        login_unix_socket: /var/run/mysqld/mysqld.sock
+      when: root_password_check.changed
+      tags: [mysql, mysql-root]
+
     - name: Remove all anonymous user accounts
       community.mysql.mysql_user:
         name: ""
@@ -191,39 +199,7 @@
         login_password: "{{ mysql_root_password }}"
       tags: [mysql]
 
-  handlers:
-    - name: Set the root password
-      community.mysql.mysql_user:
-        name: root
-        password: "{{ mysql_root_password }}"
-        login_unix_socket: /var/run/mysqld/mysqld.sock
-      when: root_password_check.changed
-      tags: [mysql, mysql-root]
-
-    - name: Extract Backup
-      ansible.builtin.unarchive:
-        src: https://storage.googleapis.com/gear5_backup_bucket/dbbackup.tar.gz
-        dest: /tmp/
-        remote_src: true
-      when: symlink_result.changed
-      register: extract_result
-      tags: [mysql]
-
-    - name: Import .sql database
-      community.mysql.mysql_db:
-        name: "{{ mysql_db }}"
-        state: import
-        target: /tmp/wordpress.bak.sql
-      when: extract_result.changed
-
 # WordPress Configuration
-- name: Setup WordPress
-  hosts: staging
-  become: true
-  vars_files:
-    - vars/default.yml
-
-  tasks:
     - name: Download and unpack latest WordPress
       ansible.builtin.unarchive:
         src: https://wordpress.org/latest.tar.gz
@@ -233,6 +209,75 @@
       register: download_result
       tags: [wordpress]
 
+    - name: Set ownership
+      ansible.builtin.file:
+        path: "/var/www/{{ http_host }}"
+        state: directory
+        recurse: true
+        owner: www-data
+        group: www-data
+      tags: [wordpress]
+
+    - name: Set permissions for directories
+      ansible.builtin.shell: "/usr/bin/find /var/www/{{ http_host }}/wordpress/ -type d -exec chmod 777 {} \\;"
+      tags: [wordpress]
+
+    - name: Set permissions for files
+      ansible.builtin.shell: "/usr/bin/find /var/www/{{ http_host }}/wordpress/ -type f -exec chmod 777 {} \\;"
+      tags: [wordpress]
+
+    - name: Set up wp-config
+      ansible.builtin.template:
+        src: "files/wp-config.php.j2"
+        dest: "/var/www/{{ http_host }}/wordpress/wp-config.php"
+      when: download_result.changed
+      tags: [wordpress]
+
+    - name: Remove file (index.html)
+      ansible.builtin.file:
+        path: "/var/www/html/index.html"
+        state: absent
+      tags: [wordpress]
+
+    - name: Remove folder (Plugins)
+      ansible.builtin.file:
+        path: "/var/www/{{ http_host }}/wordpress/wp-content/plugins"
+        state: absent
+      tags: [wordpress]
+
+    - name: Create a symbolic link (Plugins)
+      ansible.builtin.file:
+        src: "/home/runner/gear5/www/html/wp-content/plugins"
+        dest: "/var/www/{{ http_host }}/wordpress/wp-content/plugins"
+        owner: www-data
+        group: www-data
+        state: link
+      tags: [wordpress]
+
+    - name: Remove folder (Themes)
+      ansible.builtin.file:
+        path: "/var/www/{{ http_host }}/wordpress/wp-content/themes"
+        state: absent
+      tags: [wordpress]
+
+    - name: Create a symbolic link (Themes)
+      ansible.builtin.file:
+        src: "/home/runner/gear5/www/html/wp-content/themes"
+        dest: "/var/www/{{ http_host }}/wordpress/wp-content/themes"
+        owner: www-data
+        group: www-data
+        state: link
+      tags: [wordpress]
+
+    - name: Create a symbolic link (Uploads)
+      ansible.builtin.file:
+        src: "/home/runner/gear5/www/html/wp-content/uploads"
+        dest: "/var/www/{{ http_host }}/wordpress/wp-content/uploads"
+        owner: www-data
+        group: www-data
+        state: link
+      tags: [wordpress]
+
     - name: Create a symbolic link (Wordpress)
       ansible.builtin.file:
         src: "/var/www/{{ http_host }}/wordpress"
@@ -240,8 +285,14 @@
         owner: www-data
         group: www-data
         state: link
-      register: symlink_result
       tags: [wordpress]
+
+    - name: Extract Backup
+      ansible.builtin.unarchive:
+        src: https://storage.googleapis.com/gear5_backup_bucket/dbbackup.tar.gz
+        dest: /tmp/
+        remote_src: true
+      tags: [mysql]
 
     - name: Update WordPress URLs in the database dump (HTTP)
       ansible.builtin.replace:
@@ -256,94 +307,12 @@
         replace: "https://{{ lookup('env', 'INSTANCE_IP') }}"
       tags: [wordpress]
 
-  handlers:
-    - name: Set ownership
-      ansible.builtin.file:
-        path: "/var/www/{{ http_host }}"
-        state: directory
-        recurse: true
-        owner: www-data
-        group: www-data
-      when: download_result.changed
-      tags: [wordpress]
+    - name: Import .sql database
+      community.mysql.mysql_db:
+        name: "{{ mysql_db }}"
+        state: import
+        target: /tmp/wordpress.bak.sql
 
-    - name: Set permissions for directories
-      ansible.builtin.shell: "/usr/bin/find /var/www/{{ http_host }}/wordpress/ -type d -exec chmod 777 {} \\;"
-      when: download_result.changed
-      tags: [wordpress]
-
-    - name: Set permissions for files
-      ansible.builtin.shell: "/usr/bin/find /var/www/{{ http_host }}/wordpress/ -type f -exec chmod 777 {} \\;"
-      when: download_result.changed
-      tags: [wordpress]
-
-    - name: Set up wp-config
-      ansible.builtin.template:
-        src: "files/wp-config.php.j2"
-        dest: "/var/www/{{ http_host }}/wordpress/wp-config.php"
-      when: download_result.changed
-      tags: [wordpress]
-
-    - name: Remove file (index.html)
-      ansible.builtin.file:
-        path: "/var/www/html/index.html"
-        state: absent
-      when: download_result.changed
-      tags: [wordpress]
-
-    - name: Remove folder (Plugins)
-      ansible.builtin.file:
-        path: "/var/www/{{ http_host }}/wordpress/wp-content/plugins"
-        state: absent
-      when: download_result.changed
-      register: plugins_result
-      tags: [wordpress]
-
-    - name: Remove folder (Themes)
-      ansible.builtin.file:
-        path: "/var/www/{{ http_host }}/wordpress/wp-content/themes"
-        state: absent
-      when: download_result.changed
-      register: themes_result
-      tags: [wordpress]
-
-    - name: Remove folder (Uploads)
-      ansible.builtin.file:
-        path: "/var/www/{{ http_host }}/wordpress/wp-content/themes"
-        state: absent
-      when: download_result.changed
-      register: uploads_result
-      tags: [wordpress]
-
-    - name: Create a symbolic link (Plugins)
-      ansible.builtin.file:
-        src: "/home/runner/gear5/www/html/wp-content/plugins"
-        dest: "/var/www/{{ http_host }}/wordpress/wp-content/plugins"
-        owner: www-data
-        group: www-data
-        state: link
-      when: plugins_result.changed
-      tags: [wordpress]
-
-    - name: Create a symbolic link (Themes)
-      ansible.builtin.file:
-        src: "/home/runner/gear5/www/html/wp-content/themes"
-        dest: "/var/www/{{ http_host }}/wordpress/wp-content/themes"
-        owner: www-data
-        group: www-data
-        state: link
-      when: themes_result.changed
-      tags: [wordpress]
-
-    - name: Create a symbolic link (Uploads)
-      ansible.builtin.file:
-        src: "/home/runner/gear5/www/html/wp-content/uploads"
-        dest: "/var/www/{{ http_host }}/wordpress/wp-content/uploads"
-        owner: www-data
-        group: www-data
-        state: link
-      when: uploads_result.changed
-      tags: [wordpress]
 
 - name: Run tests
   hosts: staging
@@ -355,3 +324,5 @@
       ansible.builtin.command:
         cmd: "cd /home/runner/gear5 && ./smtp.sh"
       tags: [tests]
+
+
