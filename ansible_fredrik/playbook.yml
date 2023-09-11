@@ -15,7 +15,7 @@
   become: true
   tasks:
     - name: Clear destination directory
-      ansible.builtin.file:
+      file:
         path: /home/runner/gear5
         state: absent
     - name: Clone private repository
@@ -59,14 +59,14 @@
 
 
     # Apache Configuration
-    # - name: Create document root
-    #   ansible.builtin.file:
-    #     path: "/var/www/{{ http_host }}"
-    #     state: directory
-    #     owner: "www-data"
-    #     group: "www-data"
-    #     mode: "0755"
-    #   tags: [apache]
+    - name: Create document root
+      ansible.builtin.file:
+        path: "/var/www/{{ http_host }}"
+        state: directory
+        owner: "www-data"
+        group: "www-data"
+        mode: "0755"
+      tags: [apache]
 
     - name: Set up Apache VirtualHost
       ansible.builtin.template:
@@ -158,7 +158,7 @@
         src: https://wordpress.org/latest.tar.gz
         dest: "/var/www/{{ http_host }}"
         remote_src: true
-        creates: "/var/www/{{ http_host }}"
+        #creates: "/var/www/{{ http_host }}/wordpress"
       tags: [wordpress]
 
     - name: Set ownership
@@ -170,25 +170,18 @@
         group: www-data
       tags: [wordpress]
 
-    # - name: Update DocumentRoot in Apache configuration
-    #   ansible.builtin.replace:
-    #     path: /etc/apache2/sites-available/000-default.conf
-    #     regexp: '^\s*DocumentRoot.*$'
-    #     replace: '        DocumentRoot /var/www/{{ http_host }}/wordpress'
-
-
     - name: Set permissions for directories
-      ansible.builtin.shell: "/usr/bin/find /var/www/{{ http_host }}/ -type d -exec chmod 750 {} \\;"
+      ansible.builtin.shell: "/usr/bin/find /var/www/{{ http_host }}/wordpress/ -type d -exec chmod 750 {} \\;"
       tags: [wordpress]
 
     - name: Set permissions for files
-      ansible.builtin.shell: "/usr/bin/find /var/www/{{ http_host }}/ -type f -exec chmod 640 {} \\;"
+      ansible.builtin.shell: "/usr/bin/find /var/www/{{ http_host }}/wordpress/ -type f -exec chmod 640 {} \\;"
       tags: [wordpress]
 
     - name: Set up wp-config
       ansible.builtin.template:
         src: "files/wp-config.php.j2"
-        dest: "/var/www/{{ http_host }}/wp-config.php"
+        dest: "/var/www/{{ http_host }}/wordpress/wp-config.php"
       tags: [wordpress]
 
     - name: Add Google Cloud SDK apt key
@@ -201,7 +194,7 @@
         repo: "deb http://packages.cloud.google.com/apt cloud-sdk main"
         state: present
 
-    - name: Update apt and install Google Cloud SDK
+    - name: Install Google Cloud SDK
       ansible.builtin.apt:
         name: google-cloud-sdk
 
