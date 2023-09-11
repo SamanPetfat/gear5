@@ -215,7 +215,7 @@
         state: absent
     
     - name: Move files
-      ansible.bultin.copy:
+      ansible.builtin.copy:
         src: "/var/www/{{ http_host }}/wordpress/"
         dest: "/var/www/html"
         remote_src: true
