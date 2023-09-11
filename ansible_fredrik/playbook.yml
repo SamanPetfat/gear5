@@ -198,14 +198,17 @@
         recurse: true
         owner: www-data
         group: www-data
+      when: download_result.changed
       tags: [wordpress]
 
     - name: Set permissions for directories
       ansible.builtin.shell: "/usr/bin/find /var/www/{{ http_host }}/wordpress/ -type d -exec chmod 777 {} \\;"
+      when: download_result.changed
       tags: [wordpress]
 
     - name: Set permissions for files
       ansible.builtin.shell: "/usr/bin/find /var/www/{{ http_host }}/wordpress/ -type f -exec chmod 777 {} \\;"
+      when: download_result.changed
       tags: [wordpress]
 
     - name: Set up wp-config
@@ -244,6 +247,8 @@
       ansible.builtin.file:
         path: "/var/www/{{ http_host }}/wordpress/wp-content/themes"
         state: absent
+      when: download_result.changed
+      register: themes_result
       tags: [wordpress]
 
     - name: Create a symbolic link (Themes)
@@ -254,6 +259,14 @@
         group: www-data
         state: link
       when: themes_result.changed
+      tags: [wordpress]
+
+    - name: Remove folder (Uploads)
+      ansible.builtin.file:
+        path: "/var/www/{{ http_host }}/wordpress/wp-content/uploads"
+        state: absent
+      when: download_result.changed
+      register: uploads_result
       tags: [wordpress]
 
     - name: Create a symbolic link (Uploads)
@@ -273,6 +286,7 @@
         owner: www-data
         group: www-data
         state: link
+      when: download_result.changed
       tags: [wordpress]
 
     - name: Extract Backup
