@@ -229,7 +229,6 @@
       ansible.builtin.file:
         path: "/var/www/{{ http_host }}/wordpress/wp-content/plugins"
         state: absent
-      when: download_result.changed
       register: plugins_result
       tags: [wordpress]
 
@@ -240,14 +239,12 @@
         owner: www-data
         group: www-data
         state: link
-      when: plugins_result.changed
       tags: [wordpress]
 
     - name: Remove folder (Themes)
       ansible.builtin.file:
         path: "/var/www/{{ http_host }}/wordpress/wp-content/themes"
         state: absent
-      when: download_result.changed
       register: themes_result
       tags: [wordpress]
 
@@ -258,14 +255,12 @@
         owner: www-data
         group: www-data
         state: link
-      when: themes_result.changed
       tags: [wordpress]
 
     - name: Remove folder (Uploads)
       ansible.builtin.file:
         path: "/var/www/{{ http_host }}/wordpress/wp-content/uploads"
         state: absent
-      when: download_result.changed
       tags: [wordpress]
 
     - name: Create a symbolic link (Uploads)
@@ -275,7 +270,6 @@
         owner: www-data
         group: www-data
         state: link
-      when: download_result.changed
       tags: [wordpress]
 
     - name: Create a symbolic link (Wordpress)

@@ -16,7 +16,7 @@ hostname=$(hostname)
 summary="CI/CD PIPELINE HAVE FAILED AT $date ON $hostname."
 
 GITHUB_REPO="SamanPetfat/gear5"
-#GITHUB_TOKEN="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"
+GITHUB_TOKEN="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"
 
 PR_TITLE="Automated PR: Tests Passed"
 PR_BODY="This pull request is automatically created because all tests passed."
