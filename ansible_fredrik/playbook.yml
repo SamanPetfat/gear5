@@ -5,10 +5,22 @@
 
   tasks:
     - name: Update and upgrade apt packages
-      apt:
-        upgrade: yes
-        update_cache: yes
+      ansible.builtin.apt:
+        upgrade: true
+        update_cache: true
         cache_valid_time: 86400
+
+- name: Copy repository
+  hosts: staging
+  become: true
+
+  tasks:
+    - name: Copy repository from action to remote
+      ansible.builtin.fetch:
+        src: /home/runner/work/gear5/gear5
+        dest: /home/
+        flat: true
+        fail_on_missing: true
 
 - name: Install required packages
   hosts: staging
@@ -18,30 +30,35 @@
 
   tasks:
     - name: Install prerequisites
-      apt: name=aptitude update_cache=yes state=latest force_apt_get=yes
+      ansible.builtin.apt:
+        name: aptitude
+        state: present
       tags: [system]
 
     - name: Install LAMP packages
-      apt: name={{ item }} update_cache=yes state=latest
+      ansible.builtin.apt:
+        name: "{{ item }}"
+        state: present
       loop:
-        [
-          "apache2",
-          "mysql-server",
-          "python3-pymysql",
-          "php",
-          "php-mysql",
-          "libapache2-mod-php",
-        ]
+        - apache2
+        - mysql-server
+        - python3-pymysql
+        - php
+        - php-mysql
+        - libapache2-mod-php
       tags: [system]
 
     - name: Install PHP Extensions
-      apt: name={{ item }} update_cache=yes state=latest
+      ansible.builtin.apt:
+        name: "{{ item }}"
+        state: present
       loop: "{{ php_modules }}"
       tags: [system]
 
+
     # Apache Configuration
     - name: Create document root
-      file:
+      ansible.builtin.file:
         path: "/var/www/{{ http_host }}"
         state: directory
         owner: "www-data"
@@ -50,46 +67,46 @@
       tags: [apache]
 
     - name: Set up Apache VirtualHost
-      template:
+      ansible.builtin.template:
         src: "files/apache.conf.j2"
         dest: "/etc/apache2/sites-available/{{ http_conf }}"
       notify: Reload Apache
       tags: [apache]
 
     - name: Enable rewrite module
-      shell: /usr/sbin/a2enmod rewrite
+      ansible.builtin.shell: /usr/sbin/a2enmod rewrite
       notify: Reload Apache
       tags: [apache]
 
     - name: Enable new site
-      shell: /usr/sbin/a2ensite {{ http_conf }}
+      ansible.builtin.shell: /usr/sbin/a2ensite {{ http_conf }}
       notify: Reload Apache
       tags: [apache]
 
     - name: Disable default Apache site
-      shell: /usr/sbin/a2dissite 000-default.conf
+      ansible.builtin.shell: /usr/sbin/a2dissite 000-default.conf
       notify: Restart Apache
       tags: [apache]
 
     # MySQL Configuration
     - name: Set the root password
-      mysql_user:
+      community.mysql.mysql_user:
         name: root
         password: "{{ mysql_root_password }}"
         login_unix_socket: /var/run/mysqld/mysqld.sock
       tags: [mysql, mysql-root]
 
     - name: Remove all anonymous user accounts
-      mysql_user:
+      community.mysql.mysql_user:
         name: ""
-        host_all: yes
+        host_all: true
         state: absent
         login_user: root
         login_password: "{{ mysql_root_password }}"
       tags: [mysql]
 
     - name: Remove the MySQL test database
-      mysql_db:
+      community.mysql.mysql_db:
         name: test
         state: absent
         login_user: root
@@ -97,7 +114,7 @@
       tags: [mysql]
 
     - name: Creates database for WordPress
-      mysql_db:
+      community.mysql.mysql_db:
         name: "{{ mysql_db }}"
         state: present
         login_user: root
@@ -105,7 +122,7 @@
       tags: [mysql]
 
     - name: Create MySQL user for WordPress
-      mysql_user:
+      community.mysql.mysql_user:
         name: "{{ mysql_user }}"
         password: "{{ mysql_password }}"
         priv: "{{ mysql_db }}.*:ALL"
@@ -116,59 +133,57 @@
 
     # WordPress Configuration
     - name: Download and unpack latest WordPress
-      unarchive:
+      ansible.builtin.unarchive:
         src: https://wordpress.org/latest.tar.gz
         dest: "/var/www/{{ http_host }}"
-        remote_src: yes
+        remote_src: true
         creates: "/var/www/{{ http_host }}/wordpress"
       tags: [wordpress]
 
     - name: Set ownership
-      file:
+      ansible.builtin.file:
         path: "/var/www/{{ http_host }}"
         state: directory
-        recurse: yes
+        recurse: true
         owner: www-data
         group: www-data
       tags: [wordpress]
 
     - name: Set permissions for directories
-      shell: "/usr/bin/find /var/www/{{ http_host }}/wordpress/ -type d -exec chmod 750 {} \\;"
+      ansible.builtin.shell: "/usr/bin/find /var/www/{{ http_host }}/wordpress/ -type d -exec chmod 750 {} \\;"
       tags: [wordpress]
 
     - name: Set permissions for files
-      shell: "/usr/bin/find /var/www/{{ http_host }}/wordpress/ -type f -exec chmod 640 {} \\;"
+      ansible.builtin.shell: "/usr/bin/find /var/www/{{ http_host }}/wordpress/ -type f -exec chmod 640 {} \\;"
       tags: [wordpress]
 
     - name: Set up wp-config
-      template:
+      ansible.builtin.template:
         src: "files/wp-config.php.j2"
         dest: "/var/www/{{ http_host }}/wordpress/wp-config.php"
       tags: [wordpress]
 
     - name: Add Google Cloud SDK apt key
-      apt_key:
+      ansible.builtin.apt_key:
         url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
         state: present
 
     - name: Add Google Cloud SDK apt repository
-      apt_repository:
+      ansible.builtin.apt_repository:
         repo: "deb http://packages.cloud.google.com/apt cloud-sdk main"
         state: present
 
     - name: Update apt and install Google Cloud SDK
-      apt:
+      ansible.builtin.apt:
         name: google-cloud-sdk
-        state: latest
-        update_cache: yes
 
   handlers:
     - name: Reload Apache
-      service:
+      ansible.builtin.service:
         name: apache2
         state: reloaded
 
     - name: Restart Apache
-      service:
+      ansible.builtin.service:
         name: apache2
         state: restarted
