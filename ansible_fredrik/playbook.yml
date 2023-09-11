@@ -1,7 +1,7 @@
 ---
 #- name: Update
-#  hosts: staging
-#  become: true
+# hosts: staging
+# become: true
 
 #  tasks:
     #- name: Update and upgrade apt packages
@@ -209,18 +209,50 @@
       when: download_result.changed
       tags: [wordpress]
 
-    - name: Remove file
+    - name: Remove file (index.html)
       ansible.builtin.file:
         path: "/var/www/html/index.html"
         state: absent
-    
-    - name: Create a symbolic link
+      tags: [wordpress]
+      
+    - name: Remove folder (plugins)
+      ansible.builtin.file:
+        path: "/var/www/{{ http_host }}/wordpress/wp-content/plugins"
+        state: absent
+      tags: [wordpress]
+      
+    - name: Remove folder (themes)
+      ansible.builtin.file:
+        path: "/var/www/{{ http_host }}/wordpress/wp-content/themes"
+        state: absent
+      tags: [wordpress]
+      
+    - name: Create a symbolic link (Plugins)
+      ansible.builtin.file:
+        src: "/home/runner/gear5/www/html/wp-content/plugins"
+        dest: "/var/www/{{ http_host }}/wordpress/wp-content/plugins"
+        owner: www-data
+        group: www-data
+        state: link
+      tags: [wordpress]
+      
+    - name: Create a symbolic link (Themes)
+      ansible.builtin.file:
+        src: "/home/runner/gear5/www/html/wp-content/themes"
+        dest: "/var/www/{{ http_host }}/wordpress/wp-content/themes"
+        owner: www-data
+        group: www-data
+        state: link
+      tags: [wordpress]
+      
+    - name: Create a symbolic link (wordpress)
       ansible.builtin.file:
         src: "/var/www/{{ http_host }}/wordpress"
         dest: "/var/www/html"
         owner: www-data
         group: www-data
         state: link
+      tags: [wordpress]
       
     - name: Extract Backup
       ansible.builtin.unarchive:
