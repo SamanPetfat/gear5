@@ -18,7 +18,7 @@
       ansible.builtin.apt_key:
         url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
         state: present
-    
+
     - name: Add Google Cloud SDK apt repository
       ansible.builtin.apt_repository:
         repo: "deb http://packages.cloud.google.com/apt cloud-sdk main"
@@ -29,7 +29,7 @@
   become: true
   tasks:
     - name: Clear destination directory
-      file:
+      ansible.builtin.file:
         path: /home/runner/gear5
         state: absent
     - name: Clone private repository
@@ -206,23 +206,23 @@
 
 
     - name: Download Backup File
-      ansible.buildin.get_url:
+      ansible.builtin.get_url:
         url: https://storage.googleapis.com/gear5_backup_bucket/dbbackup.tar.gz
         dest: /var/backup/dbbackup.tar.gz
-        validate_certs: no
+        validate_certs: false
 
     - name: Extract Backup
       ansible.builtin.unarchive:
         src: /var/backup/dbbackup.tar.gz
         dest: /tmp/
-        copy: no
-    
+        copy: true
+
     - name: Import .sql database
       community.mysql.mysql_db:
         name: "{{ wp_mysql_db }}"
         state: import
         target: /tmp/wordpress.bak.sql
-  
+
   handlers:
     - name: Reload Apache
       ansible.builtin.service:
