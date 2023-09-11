@@ -273,7 +273,6 @@
         owner: www-data
         group: www-data
         state: link
-      register: symlink_result
       tags: [wordpress]
 
     - name: Extract Backup
@@ -326,4 +325,5 @@
       environment:
         GITHUB_TOKEN: "{{ github_token }}"
       tags: [tests]
+
 
