@@ -332,12 +332,17 @@
   become: true
   vars:
     github_token: "{{ lookup('env', 'GITHUB_TOKEN') }}"
+
   tasks:
+    - name: Chmod smtp.sh
+      ansible.builtin.file:
+        path: /home/runner/gear5/smtp.sh
+        mode: "0777"
+      tags: [tests]
+
     - name: Run tests
       ansible.builtin.shell:
         cmd: "cd /home/runner/gear5 && ./smtp.sh"
       environment:
         GITHUB_TOKEN: "{{ github_token }}"
       tags: [tests]
-
-
