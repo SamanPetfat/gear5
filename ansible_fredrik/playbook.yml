@@ -15,12 +15,13 @@
   become: true
 
   tasks:
-    - name: Copy repository from action to remote
-      ansible.builtin.fetch:
-        src: /home/runner/work/gear5/gear5
+    - name: Copy repository from control to remote
+      ansible.builtin.copy:
+        src: /home/runner/work/gear5/gear5/
         dest: /home/
-        flat: true
-        fail_on_missing: true
+        directory_mode: true
+        remote_src: false
+
 
 - name: Install required packages
   hosts: staging
