@@ -25,10 +25,10 @@
         repo: "deb http://packages.cloud.google.com/apt cloud-sdk main"
         state: present
 
-    - name: Install Google Cloud SDK
-      ansible.builtin.apt:
-        name: google-cloud-sdk
-        state: present
+    # - name: Install Google Cloud SDK
+    #   ansible.builtin.apt:
+    #     name: google-cloud-sdk
+    #     state: present
 
 - name: Clone repository
   hosts: staging
