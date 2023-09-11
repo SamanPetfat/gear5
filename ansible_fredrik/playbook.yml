@@ -158,7 +158,7 @@
         src: https://wordpress.org/latest.tar.gz
         dest: "/var/www/{{ http_host }}"
         remote_src: true
-        creates: "/var/www/{{ http_host }}/wordpress"
+        creates: "/var/www/{{ http_host }}"
       tags: [wordpress]
 
     - name: Set ownership
@@ -170,11 +170,11 @@
         group: www-data
       tags: [wordpress]
 
-    - name: Update DocumentRoot in Apache configuration
-      ansible.builtin.replace:
-        path: /etc/apache2/sites-available/000-default.conf
-        regexp: '^\s*DocumentRoot.*$'
-        replace: '        DocumentRoot /var/www/{{ http_host }}/wordpress'
+    # - name: Update DocumentRoot in Apache configuration
+    #   ansible.builtin.replace:
+    #     path: /etc/apache2/sites-available/000-default.conf
+    #     regexp: '^\s*DocumentRoot.*$'
+    #     replace: '        DocumentRoot /var/www/{{ http_host }}/wordpress'
 
 
     - name: Set permissions for directories
