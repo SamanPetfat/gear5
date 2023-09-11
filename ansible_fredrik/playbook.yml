@@ -215,13 +215,13 @@
         state: absent
       tags: [wordpress]
       
-    - name: Remove folder (plugins)
+    - name: Remove folder (Plugins)
       ansible.builtin.file:
         path: "/var/www/{{ http_host }}/wordpress/wp-content/plugins"
         state: absent
       tags: [wordpress]
       
-    - name: Remove folder (themes)
+    - name: Remove folder (Themes)
       ansible.builtin.file:
         path: "/var/www/{{ http_host }}/wordpress/wp-content/themes"
         state: absent
@@ -244,8 +244,17 @@
         group: www-data
         state: link
       tags: [wordpress]
-      
-    - name: Create a symbolic link (wordpress)
+    
+    - name: Create a symbolic link (Uploads)
+      ansible.builtin.file:
+        src: "/home/runner/gear5/www/html/wp-content/uploads"
+        dest: "/var/www/{{ http_host }}/wordpress/wp-content/uploads"
+        owner: www-data
+        group: www-data
+        state: link
+      tags: [wordpress]
+    
+    - name: Create a symbolic link (Wordpress)
       ansible.builtin.file:
         src: "/var/www/{{ http_host }}/wordpress"
         dest: "/var/www/html"
