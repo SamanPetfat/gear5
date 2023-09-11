@@ -35,6 +35,7 @@ jobs:
         commit-message: 'Apply PHPCBF fixes'
         branch: 'phpcbf-fixes'
         token: ${{ secrets.PHPLINT_TOKEN }}
+        base: ${{ github.head_ref }}
         labels: |
           phpcbf
           automated
