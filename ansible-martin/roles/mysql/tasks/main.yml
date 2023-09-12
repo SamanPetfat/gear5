@@ -34,6 +34,11 @@
     copy: no
   become: yes
 
+- name: Update WordPress URLs in the database dump
+  ansible.builtin.shell:
+    cmd: sed -i 's|http://gear5.online|http://165.22.78.38|g' /tmp/wordpress.bak.sql
+  become: yes
+
 - name: Import .sql database
   mysql_db:
     name: "{{ wp_mysql_db }}"
