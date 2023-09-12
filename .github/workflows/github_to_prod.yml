@@ -35,10 +35,12 @@ jobs:
           
           if [ -d "gear5" ]; then
           # Directory exists, cd into it and pull
+            echo "Folder exists, doing a pull"
             cd gear5
             git pull
           else  
           # Directory doesn't exist, clone the repo
+            echo "Folder doesnt exist, doing a clone"
             git clone git@github.com:SamanPetfat/gear5.git
           fi
           EOF
