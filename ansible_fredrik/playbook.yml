@@ -214,38 +214,14 @@
         group: www-data
       when: download_result is changed
       tags: [wordpress]
-
+    
     - name: Set permissions for directories
-      ansible.builtin.find:
-        paths: "{{ wordpress_dir }}"
-        recurse: true
-        file_type: directory
-      register: directories
-      tags: [wordpress]
-
-    - name: Set permissions on directories
-      ansible.builtin.file:
-        path: "{{ item.path }}"
-        mode: '0755'
-      with_items: "{{ directories.files }}"
-      when: download_result is changed
-      tags: [wordpress]
-
+      ansible.builtin.shell: "/usr/bin/find /var/www/{{ http_host }}/wordpress/ -type d -exec chmod 777 {} \\;"
+      when: download_result.changed
+    
     - name: Set permissions for files
-      ansible.builtin.find:
-        paths: "{{ wordpress_dir }}"
-        recurse: true
-        file_type: file
-      register: files
-      tags: [wordpress]
-
-    - name: Set permissions on files
-      ansible.builtin.file:
-        path: "{{ item.path }}"
-        mode: '0644'
-      with_items: "{{ files.files }}"
-      when: download_result is changed
-      tags: [wordpress]
+      ansible.builtin.shell: "/usr/bin/find /var/www/{{ http_host }}/wordpress/ -type f -exec chmod 777 {} \\;"
+      when: download_result.changed
 
     - name: Set up wp-config
       ansible.builtin.template:
