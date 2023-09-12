@@ -16,7 +16,7 @@ jobs:
         env:
           GITHUB_ACTION_KEY: ${{secrets.KEY}}
         run: |
-          echo "$MY_SECRET" >> github_action_key
+          echo "$GITHUB_ACTION_KEY" >> github_action_key
 
       - name: Git pull on prod
         run: |
