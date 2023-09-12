@@ -23,7 +23,7 @@ jobs:
       - name: Git pull on prod
         run: |
           ssh -i ./github_action_key root@gear5.online
-          git config user.name Github
+          git config user.name "Github"
           git config user.email "noreply@github.com"
           git config github.token ${{ secrets.PHPLINT_TOKEN }}
           git pull git@github.com:SamanPetfat/gear5.git
