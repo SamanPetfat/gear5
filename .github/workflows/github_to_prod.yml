@@ -17,11 +17,18 @@ jobs:
           GITHUB_ACTION_KEY: ${{secrets.GHUB_ACTION_KEY}}
         run: |
           echo "$GITHUB_ACTION_KEY" >> github_action_key
+      
+      - name: Setup known hosts
+        run: |
+          echo "[gear5.online]:22 ${{ secrets.SERVER_PUBLIC_KEY }}" >> ~/.ssh/known_hosts
 
       - name: Git pull on prod
         run: |
-          ssh -i ./github_action_key root@gear5.online
+          chmod 600 ./github_action_key
+          ssh -T -i ./github_action_key root@gear5.online <<EOF
           git config user.name "Github"
           git config user.email "noreply@github.com"
           git config github.token ${{ secrets.PHPLINT_TOKEN }}
           git clone git@github.com:SamanPetfat/gear5.git
+          EOF
+      
