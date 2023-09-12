@@ -14,7 +14,7 @@ jobs:
 
       - name: print secrets
         env:
-          GITHUB_ACTION_KEY: ${{secrets.KEY}}
+          GITHUB_ACTION_KEY: ${{secrets.GHUB_ACTION_KEY}}
         run: |
           echo "$GITHUB_ACTION_KEY" >> github_action_key
 
