@@ -20,7 +20,11 @@ jobs:
       
       - name: Setup known hosts
         run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
           echo "[gear5.online]:22 ${{ secrets.SERVER_PUBLIC_KEY }}" >> ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/known_hosts
+
 
       - name: Git pull on prod
         run: |
