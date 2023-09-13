@@ -4,9 +4,9 @@
  * Services content.
  */
 return array(
-	'title'      => __( 'Services', 'zeever' ),
-	'categories' => array( 'zeever-basic' ),
-	'content'    => '<!-- wp:group {"style":{"spacing":{"padding":{"top":"100px","bottom":"100px"}}},"backgroundColor":"zeever-bgsoft","layout":{"wideSize":"1170px","contentSize":"1170px"}} -->
+    'title'      => __('Services', 'zeever'),
+    'categories' => array( 'zeever-basic' ),
+    'content'    => '<!-- wp:group {"style":{"spacing":{"padding":{"top":"100px","bottom":"100px"}}},"backgroundColor":"zeever-bgsoft","layout":{"wideSize":"1170px","contentSize":"1170px"}} -->
                 <div class="wp-block-group has-zeever-bgsoft-background-color has-background" style="padding-top:100px;padding-bottom:100px"><!-- wp:columns -->
                 <div class="wp-block-columns"><!-- wp:column -->
                 <div class="wp-block-column"><!-- wp:group -->
@@ -31,7 +31,7 @@ return array(
                 <div class="wp-block-group zeever-animate zeever-move-up zeever-delay-3" style="padding-top:40px"><!-- wp:columns -->
                 <div class="wp-block-columns"><!-- wp:column {"style":{"spacing":{"padding":{"top":"50px","right":"40px","bottom":"50px","left":"40px"}},"color":{"background":"#121212"}},"className":"is-style-customborderbottomhover zeever-animate zeever-move-up zeever-delay-1"} -->
                 <div class="wp-block-column is-style-customborderbottomhover zeever-animate zeever-move-up zeever-delay-1 has-background" style="background-color:#121212;padding-top:50px;padding-right:40px;padding-bottom:50px;padding-left:40px"><!-- wp:image {"id":135,"width":50,"height":50,"sizeSlug":"full","linkDestination":"none"} -->
-                <figure class="wp-block-image size-full is-resized"><img src="' . esc_url( ZEEVER_URI ) . 'assets/img/strategy.webp" alt="" class="wp-image-135" width="50" height="50"/></figure>
+                <figure class="wp-block-image size-full is-resized"><img src="' . esc_url(ZEEVER_URI) . 'assets/img/strategy.webp" alt="" class="wp-image-135" width="50" height="50"/></figure>
                 <!-- /wp:image -->
                 
                 <!-- wp:heading {"textAlign":"left","style":{"spacing":{"margin":{"top":"30px","bottom":"20px"}}},"textColor":"zeever-primary","fontSize":"heading-3"} -->
@@ -45,7 +45,7 @@ return array(
                 
                 <!-- wp:column {"style":{"spacing":{"padding":{"top":"50px","right":"40px","bottom":"0px","left":"40px"}}},"backgroundColor":"zeever-secondary","className":"is-style-customborderbottom zeever-animate zeever-move-up zeever-delay-3"} -->
                 <div class="wp-block-column is-style-customborderbottom zeever-animate zeever-move-up zeever-delay-3 has-zeever-secondary-background-color has-background" style="padding-top:50px;padding-right:40px;padding-bottom:0px;padding-left:40px"><!-- wp:image {"id":130,"width":50,"height":50,"sizeSlug":"full","linkDestination":"none"} -->
-                <figure class="wp-block-image size-full is-resized"><img src="' . esc_url( ZEEVER_URI ) . 'assets/img/ui-design.webp" alt="" class="wp-image-130" width="50" height="50"/></figure>
+                <figure class="wp-block-image size-full is-resized"><img src="' . esc_url(ZEEVER_URI) . 'assets/img/ui-design.webp" alt="" class="wp-image-130" width="50" height="50"/></figure>
                 <!-- /wp:image -->
                 
                 <!-- wp:heading {"textAlign":"left","style":{"spacing":{"margin":{"top":"20px"}},"typography":{"fontStyle":"normal","fontWeight":"600"}},"textColor":"black","fontSize":"heading-3"} -->
@@ -59,7 +59,7 @@ return array(
                 
                 <!-- wp:column {"style":{"spacing":{"padding":{"top":"50px","right":"40px","bottom":"50px","left":"40px"}},"color":{"background":"#121212"}},"className":"is-style-customborderbottomhover zeever-animate zeever-move-up zeever-delay-5"} -->
                 <div class="wp-block-column is-style-customborderbottomhover zeever-animate zeever-move-up zeever-delay-5 has-background" style="background-color:#121212;padding-top:50px;padding-right:40px;padding-bottom:50px;padding-left:40px"><!-- wp:image {"id":133,"width":50,"height":50,"sizeSlug":"full","linkDestination":"none"} -->
-                <figure class="wp-block-image size-full is-resized"><img src="' . esc_url( ZEEVER_URI ) . 'assets/img/content.webp" alt="" class="wp-image-133" width="50" height="50"/></figure>
+                <figure class="wp-block-image size-full is-resized"><img src="' . esc_url(ZEEVER_URI) . 'assets/img/content.webp" alt="" class="wp-image-133" width="50" height="50"/></figure>
                 <!-- /wp:image -->
                 
                 <!-- wp:heading {"textAlign":"left","style":{"spacing":{"margin":{"top":"30px","bottom":"20px"}},"typography":{"fontStyle":"normal","fontWeight":"600"}},"textColor":"zeever-primary","fontSize":"heading-3"} -->
@@ -77,7 +77,7 @@ return array(
                 <div class="wp-block-group zeever-animate zeever-move-up zeever-delay-3" style="padding-top:40px"><!-- wp:columns -->
                 <div class="wp-block-columns"><!-- wp:column {"style":{"spacing":{"padding":{"top":"50px","right":"40px","bottom":"50px","left":"40px"}},"color":{"background":"#121212"}},"className":"is-style-customborderbottomhover zeever-animate zeever-move-up zeever-delay-1"} -->
                 <div class="wp-block-column is-style-customborderbottomhover zeever-animate zeever-move-up zeever-delay-1 has-background" style="background-color:#121212;padding-top:50px;padding-right:40px;padding-bottom:50px;padding-left:40px"><!-- wp:image {"id":131,"width":50,"height":50,"sizeSlug":"full","linkDestination":"none"} -->
-                <figure class="wp-block-image size-full is-resized"><img src="' . esc_url( ZEEVER_URI ) . 'assets/img/marketing.webp" alt="" class="wp-image-131" width="50" height="50"/></figure>
+                <figure class="wp-block-image size-full is-resized"><img src="' . esc_url(ZEEVER_URI) . 'assets/img/marketing.webp" alt="" class="wp-image-131" width="50" height="50"/></figure>
                 <!-- /wp:image -->
                 
                 <!-- wp:heading {"textAlign":"left","style":{"spacing":{"margin":{"top":"20px"}},"typography":{"fontStyle":"normal","fontWeight":"600"}},"textColor":"zeever-primary","fontSize":"heading-3"} -->
@@ -91,7 +91,7 @@ return array(
                 
                 <!-- wp:column {"style":{"spacing":{"padding":{"top":"50px","right":"40px","bottom":"50px","left":"40px"}},"color":{"background":"#121212"}},"className":"is-style-customborderbottomhover zeever-animate zeever-move-up zeever-delay-3"} -->
                 <div class="wp-block-column is-style-customborderbottomhover zeever-animate zeever-move-up zeever-delay-3 has-background" style="background-color:#121212;padding-top:50px;padding-right:40px;padding-bottom:50px;padding-left:40px"><!-- wp:image {"id":132,"width":50,"height":50,"sizeSlug":"full","linkDestination":"none"} -->
-                <figure class="wp-block-image size-full is-resized"><img src="' . esc_url( ZEEVER_URI ) . 'assets/img/web.webp" alt="" class="wp-image-132" width="50" height="50"/></figure>
+                <figure class="wp-block-image size-full is-resized"><img src="' . esc_url(ZEEVER_URI) . 'assets/img/web.webp" alt="" class="wp-image-132" width="50" height="50"/></figure>
                 <!-- /wp:image -->
                 
                 <!-- wp:heading {"textAlign":"left","style":{"spacing":{"margin":{"top":"20px"}},"typography":{"fontStyle":"normal","fontWeight":"600"}},"textColor":"zeever-primary","fontSize":"heading-3"} -->
@@ -105,7 +105,7 @@ return array(
                 
                 <!-- wp:column {"style":{"spacing":{"padding":{"top":"50px","right":"40px","bottom":"50px","left":"40px"}},"color":{"background":"#121212"}},"className":"is-style-customborderbottomhover zeever-animate zeever-move-up zeever-delay-5"} -->
                 <div class="wp-block-column is-style-customborderbottomhover zeever-animate zeever-move-up zeever-delay-5 has-background" style="background-color:#121212;padding-top:50px;padding-right:40px;padding-bottom:50px;padding-left:40px"><!-- wp:image {"id":134,"width":50,"height":50,"sizeSlug":"full","linkDestination":"none"} -->
-                <figure class="wp-block-image size-full is-resized"><img src="' . esc_url( ZEEVER_URI ) . 'assets/img/social-media.webp" alt="" class="wp-image-134" width="50" height="50"/></figure>
+                <figure class="wp-block-image size-full is-resized"><img src="' . esc_url(ZEEVER_URI) . 'assets/img/social-media.webp" alt="" class="wp-image-134" width="50" height="50"/></figure>
                 <!-- /wp:image -->
                 
                 <!-- wp:heading {"textAlign":"left","style":{"spacing":{"margin":{"top":"20px"}},"typography":{"fontStyle":"normal","fontWeight":"600"}},"textColor":"zeever-primary","fontSize":"heading-3"} -->
