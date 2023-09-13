@@ -351,6 +351,8 @@
 - name: Install WP-CLI and activate latest theme
   hosts: staging
   become: true
+  vars_files:
+    - vars/default.yml
 
   tasks:
     - name: Check if wp-cli exists
