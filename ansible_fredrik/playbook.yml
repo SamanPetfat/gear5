@@ -383,7 +383,7 @@
       shell: |
         LATEST_THEME=$(find /home/runner/gear5/www/html/wp-content/themes -maxdepth 1 -type d | xargs -I {} stat --format '%Y %n' {} | sort -n | tail -1 | awk '{print $2}' | xargs basename)
         cd "/var/www/{{ http_host }}/wordpress"
-        /usr/local/bin/wp theme activate $LATEST_THEME
+        /usr/local/bin/wp theme activate $LATEST_THEME --allow-root
       tags:
         - theme
         - activate
