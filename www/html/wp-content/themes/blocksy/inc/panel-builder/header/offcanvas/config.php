@@ -1,5 +1,5 @@
 <?php
 
 $config = [
-	'name' => __('Offcanvas', 'blocksy')
+    'name' => __('Offcanvas', 'blocksy')
 ];

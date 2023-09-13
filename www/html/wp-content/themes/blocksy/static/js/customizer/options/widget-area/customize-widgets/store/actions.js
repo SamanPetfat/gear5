@@ -10,9 +10,10 @@
  *
  * @return {Object} Action object.
  */
-export function setIsInserterOpened(value) {
-	return {
-		type: 'SET_IS_INSERTER_OPENED',
-		value,
-	}
+export function setIsInserterOpened(value)
+{
+    return {
+        type: 'SET_IS_INSERTER_OPENED',
+        value,
+    }
 }

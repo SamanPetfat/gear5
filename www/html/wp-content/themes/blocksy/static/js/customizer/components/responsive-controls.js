@@ -9,69 +9,69 @@ import { getOptionFor } from '../../options/GenericOptionType'
  * skip
  */
 export const isOptionEnabledFor = (currentDevice, responsiveDescriptor) =>
-	({
-		desktop: true,
-		tablet: true,
-		mobile: true,
+    ({
+        desktop: true,
+        tablet: true,
+        mobile: true,
 
-		...(typeof responsiveDescriptor === 'boolean'
-			? {}
-			: responsiveDescriptor || {}),
-	}[currentDevice])
+        ...(typeof responsiveDescriptor === 'boolean'
+            ? {}
+            : responsiveDescriptor || {}),
+    }[currentDevice])
 
 export const isOptionResponsiveFor = (option, args = {}) => {
-	let { ignoreHidden = false } = args
+    let { ignoreHidden = false } = args
 
-	let OptionComponent = getOptionFor(option)
+    let OptionComponent = getOptionFor(option)
 
-	if (OptionComponent.hiddenResponsive) {
-		if (!ignoreHidden) {
-			return true
-		}
-	}
+    if (OptionComponent.hiddenResponsive) {
+        if (!ignoreHidden) {
+            return true
+        }
+    }
 
-	return !!option.responsive
+    return !!option.responsive
 }
 
 export const getValueForDevice = ({ value, option, device }) => {
-	const devices = ['desktop', 'tablet', 'mobile']
+    const devices = ['desktop', 'tablet', 'mobile']
 
-	if (
-		device === 'tablet' &&
-		isOptionEnabledFor(device, option.responsive) === 'skip'
-	) {
-		return value.mobile
-	}
+    if (
+        device === 'tablet' &&
+        isOptionEnabledFor(device, option.responsive) === 'skip'
+    ) {
+        return value.mobile
+    }
 
-	return value[device]
+    return value[device]
 }
 
 const ResponsiveControls = ({ device, setDevice, responsiveDescriptor }) => (
-	<div className="ct-control-options">
-		<ul className="ct-responsive-controls ct-devices">
-			{['desktop', 'tablet', 'mobile']
-				.filter(
-					(d) =>
-						isOptionEnabledFor(d, responsiveDescriptor) !== 'skip'
-				)
-				.map((d) => (
-					<li
-						onClick={() => setDevice(d)}
-						className={classnames(
-							{
-								active: d === device,
-								'ct-disabled': !isOptionEnabledFor(
-									d,
-									responsiveDescriptor
-								),
-							},
-							`ct-${d}`
-						)}
-						key={d}
-					/>
-				))}
-		</ul>
-	</div>
+    <div className="ct-control-options">
+        <ul className="ct-responsive-controls ct-devices">
+            {['desktop', 'tablet', 'mobile']
+                .filter(
+                    (d) =>
+                    isOptionEnabledFor(d, responsiveDescriptor) !== 'skip'
+                )
+                .map((d) => (
+                    <li
+                        onClick={() => setDevice(d)}
+                        className={classnames(
+                            {
+                                active: d === device,
+                                'ct-disabled': !isOptionEnabledFor(
+                                    d,
+                                    responsiveDescriptor
+                                ),
+                            },
+                            `ct-${d}`
+                        )}
+                        key={d}
+                    />
+                ))}
+        </ul>
+    </div>
 )
 
 export default ResponsiveControls

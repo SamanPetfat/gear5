@@ -1,9 +1,9 @@
 <?php
 
 $config = [
-	'name' => __('Menu 2', 'blocksy'),
-	'typography_keys' => ['headerMenuFont', 'headerDropdownFont'],
+    'name' => __('Menu 2', 'blocksy'),
+    'typography_keys' => ['headerMenuFont', 'headerDropdownFont'],
     'devices' => ['desktop'],
-	'selective_refresh' => ['menu'],
-	'excluded_from' => ['offcanvas']
+    'selective_refresh' => ['menu'],
+    'excluded_from' => ['offcanvas']
 ];
