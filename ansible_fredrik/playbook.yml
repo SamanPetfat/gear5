@@ -351,8 +351,6 @@
 - name: Install WP-CLI and activate latest theme
   hosts: staging
   become: true
-  vars:
-    wordpress_dir: "/var/www/{{ http_host }}/wordpress"
   vars_files:
     - vars/default.yml
 
@@ -393,7 +391,7 @@
       shell: |
         wp theme activate {{ latest_theme.stdout }} --allow-root
       args:
-        chdir: {{ wordpress_dir }}
+        chdir: /var/www/{{ http_host }}/wordpress
       when: latest_theme.stdout | length > 0
 
 - name: Run tests
