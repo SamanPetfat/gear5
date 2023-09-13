@@ -19,47 +19,47 @@ import SidebarAdapter from '../sidebar-block-editor/sidebar-adapter'
 let cacheForAdapters = {}
 
 const CustomizeWidgets = ({ sidebarId }) => {
-	const blockEditorSettings = window.blocksyWidgetsBlockEditorSettings
-	const popoverRef = useRef()
+    const blockEditorSettings = window.blocksyWidgetsBlockEditorSettings
+    const popoverRef = useRef()
 
-	const sidebarControls = Object.values(wp.customize.control._value).filter(
-		(v) => v.constructor.name === 'SidebarControl'
-	)
+    const sidebarControls = Object.values(wp.customize.control._value).filter(
+        (v) => v.constructor.name === 'SidebarControl'
+    )
 
-	const activeSidebarControl = wp.customize.control(
-		`sidebars_widgets[${sidebarId}]`
-	)
+    const activeSidebarControl = wp.customize.control(
+        `sidebars_widgets[${sidebarId}]`
+    )
 
-	let sidebarAdapter = null
+    let sidebarAdapter = null
 
-	if (!cacheForAdapters[sidebarId]) {
-		cacheForAdapters[sidebarId] = new SidebarAdapter(
-			activeSidebarControl.setting
-		)
-	}
+if (!cacheForAdapters[sidebarId]) {
+    cacheForAdapters[sidebarId] = new SidebarAdapter(
+        activeSidebarControl.setting
+    )
+}
 
-	const activeSidebar = (
-		<ErrorBoundary>
-			<SidebarBlockEditor
-				key={sidebarId}
-				sidebarId={sidebarId}
-				blockEditorSettings={blockEditorSettings}
-				sidebar={cacheForAdapters[sidebarId]}
-				inserter={activeSidebarControl.inserter}
-				inspector={activeSidebarControl.inspector}
-			/>
-		</ErrorBoundary>
-	)
+    const activeSidebar = (
+        <ErrorBoundary>
+            <SidebarBlockEditor
+                key={sidebarId}
+                sidebarId={sidebarId}
+                blockEditorSettings={blockEditorSettings}
+                sidebar={cacheForAdapters[sidebarId]}
+                inserter={activeSidebarControl.inserter}
+                inspector={activeSidebarControl.inspector}
+            />
+        </ErrorBoundary>
+    )
 
-	return (
-		<ShortcutProvider>
-			<SidebarControls
-				sidebarControls={[]}
-				activeSidebarControl={activeSidebarControl}>
-				{activeSidebar}
-			</SidebarControls>
-		</ShortcutProvider>
-	)
+    return (
+        <ShortcutProvider>
+            <SidebarControls
+                sidebarControls={[]}
+                activeSidebarControl={activeSidebarControl}>
+                {activeSidebar}
+            </SidebarControls>
+        </ShortcutProvider>
+    )
 }
 
 export default CustomizeWidgets

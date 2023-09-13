@@ -8,44 +8,48 @@ import { Button } from '@wordpress/components'
 import { Warning } from '@wordpress/block-editor'
 import { useCopyToClipboard } from '@wordpress/compose'
 
-function CopyButton({ text, children }) {
-	const ref = useCopyToClipboard(text)
+function CopyButton({ text, children })
+{
+    const ref = useCopyToClipboard(text)
 
-	return (
-		<Button variant="secondary" ref={ref}>
-			{children}
-		</Button>
-	)
+    return (
+        <Button variant="secondary" ref={ref}>
+            {children}
+        </Button>
+    )
 }
 
 export default class ErrorBoundary extends Component {
-	constructor() {
-		super(...arguments)
-		this.state = {
-			error: null,
-		}
-	}
+    constructor()
+    {
+        super(...arguments)
+        this.state = {
+            error: null,
+        }
+    }
 
-	componentDidCatch(error) {
-		this.setState({ error })
-	}
+    componentDidCatch(error)
+    {
+        this.setState({ error })
+    }
 
-	render() {
-		const { error } = this.state
-		if (!error) {
-			return this.props.children
-		}
+    render()
+    {
+        const { error } = this.state
+        if (!error) {
+            return this.props.children
+        }
 
-		return (
-			<Warning
-				className="customize-widgets-error-boundary"
-				actions={[
-					<CopyButton key="copy-error" text={error.stack}>
-						{__('Copy Error')}
-					</CopyButton>,
-				]}>
-				{__('The editor has encountered an unexpected error.')}
-			</Warning>
-		)
-	}
+        return (
+            <Warning
+                className="customize-widgets-error-boundary"
+                actions={[
+                    <CopyButton key="copy-error" text={error.stack}>
+                        {__('Copy Error')}
+                    </CopyButton>,
+                    ]}>
+                {__('The editor has encountered an unexpected error.')}
+            </Warning>
+        )
+    }
 }

@@ -19,9 +19,9 @@ import { STORE_NAME } from './constants'
  * @type {Object}
  */
 const storeConfig = {
-	reducer,
-	selectors,
-	actions,
+    reducer,
+    selectors,
+    actions,
 }
 
 /**

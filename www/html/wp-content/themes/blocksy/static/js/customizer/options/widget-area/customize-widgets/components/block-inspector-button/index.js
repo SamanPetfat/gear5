@@ -7,20 +7,21 @@ import { MenuItem } from '@wordpress/components'
 
 import { PanelContext } from '../../../../../../options/components/PanelLevel'
 
-function BlockInspectorButton({ closeMenu, ...props }) {
-	const { panelsHelpers } = useContext(PanelContext)
+function BlockInspectorButton({ closeMenu, ...props })
+{
+    const { panelsHelpers } = useContext(PanelContext)
 
-	return (
-		<MenuItem
-			onClick={() => {
-				panelsHelpers.openSecondLevel()
-				// Then close the dropdown menu.
-				closeMenu()
-			}}
-			{...props}>
-			{__('Show more settings', 'blocksy')}
-		</MenuItem>
-	)
+    return (
+        <MenuItem
+            onClick={() => {
+                panelsHelpers.openSecondLevel()
+                // Then close the dropdown menu.
+                closeMenu()
+                }}
+            {...props}>
+            {__('Show more settings', 'blocksy')}
+        </MenuItem>
+    )
 }
 
 export default BlockInspectorButton

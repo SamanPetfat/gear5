@@ -1,6 +1,5 @@
 <?php
 
 $config = [
-	'name' => __('Bottom Row', 'blocksy'),
+    'name' => __('Bottom Row', 'blocksy'),
 ];
-
