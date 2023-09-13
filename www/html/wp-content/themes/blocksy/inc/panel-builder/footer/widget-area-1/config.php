@@ -1,7 +1,5 @@
 <?php
 
 $config = [
-	'name' => __('Widget Area 1', 'blocksy')
+    'name' => __('Widget Area 1', 'blocksy')
 ];
-
-

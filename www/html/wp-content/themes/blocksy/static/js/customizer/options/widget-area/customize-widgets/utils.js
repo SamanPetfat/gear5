@@ -16,17 +16,18 @@ import { omit } from 'lodash'
  * @param {string} settingId The setting id.
  * @return {string} The widget id.
  */
-export function settingIdToWidgetId(settingId) {
-	const matches = settingId.match(/^widget_(.+)(?:\[(\d+)\])$/)
+export function settingIdToWidgetId(settingId)
+{
+    const matches = settingId.match(/^widget_(.+)(?:\[(\d+)\])$/)
 
-	if (matches) {
-		const idBase = matches[1]
-		const number = parseInt(matches[2], 10)
+    if (matches) {
+        const idBase = matches[1]
+        const number = parseInt(matches[2], 10)
 
-		return `${idBase}-${number}`
-	}
+        return `${idBase}-${number}`
+    }
 
-	return settingId
+    return settingId
 }
 
 /**
@@ -36,53 +37,54 @@ export function settingIdToWidgetId(settingId) {
  * @param {Object}  existingWidget The widget to be extended from.
  * @return {Object} The transformed widget.
  */
-export function blockToWidget(block, existingWidget = null) {
-	let widget
+export function blockToWidget(block, existingWidget = null)
+{
+    let widget
 
-	const isValidLegacyWidgetBlock =
-		block.name === 'core/legacy-widget' &&
-		(block.attributes.id || block.attributes.instance)
+    const isValidLegacyWidgetBlock =
+        block.name === 'core/legacy-widget' &&
+        (block.attributes.id || block.attributes.instance)
 
-	if (isValidLegacyWidgetBlock) {
-		if (block.attributes.id) {
-			// Widget that does not extend WP_Widget.
-			widget = {
-				id: block.attributes.id,
-			}
-		} else {
-			const { encoded, hash, raw, ...rest } = block.attributes.instance
+    if (isValidLegacyWidgetBlock) {
+        if (block.attributes.id) {
+            // Widget that does not extend WP_Widget.
+            widget = {
+                id: block.attributes.id,
+            }
+        } else {
+            const { encoded, hash, raw, ...rest } = block.attributes.instance
 
-			// Widget that extends WP_Widget.
-			widget = {
-				idBase: block.attributes.idBase,
-				instance: {
-					...existingWidget?.instance,
-					// Required only for the customizer.
-					is_widget_customizer_js_value: true,
-					encoded_serialized_instance: encoded,
-					instance_hash_key: hash,
-					raw_instance: raw,
-					...rest,
-				},
-			}
-		}
-	} else {
-		const instance = {
-			content: serialize(block),
-		}
-		widget = {
-			idBase: 'block',
-			widgetClass: 'WP_Widget_Block',
-			instance: {
-				raw_instance: instance,
-			},
-		}
-	}
+            // Widget that extends WP_Widget.
+            widget = {
+                idBase: block.attributes.idBase,
+                instance: {
+                    ...existingWidget?.instance,
+                    // Required only for the customizer.
+                    is_widget_customizer_js_value: true,
+                    encoded_serialized_instance: encoded,
+                    instance_hash_key: hash,
+                    raw_instance: raw,
+                    ...rest,
+                },
+            }
+        }
+    } else {
+        const instance = {
+            content: serialize(block),
+        }
+        widget = {
+            idBase: 'block',
+            widgetClass: 'WP_Widget_Block',
+            instance: {
+                raw_instance: instance,
+            },
+        }
+    }
 
-	return {
-		...omit(existingWidget, ['form', 'rendered']),
-		...widget,
-	}
+    return {
+        ...omit(existingWidget, ['form', 'rendered']),
+        ...widget,
+    }
 }
 
 /**
@@ -95,38 +97,39 @@ export function blockToWidget(block, existingWidget = null) {
  * @param {Object} widget.instance The instance of the widget.
  * @return {WPBlock} The transformed block.
  */
-export function widgetToBlock({ id, idBase, number, instance }) {
-	let block
+export function widgetToBlock({ id, idBase, number, instance })
+{
+    let block
 
-	const {
-		encoded_serialized_instance: encoded,
-		instance_hash_key: hash,
-		raw_instance: raw,
-		...rest
-	} = instance
+    const {
+        encoded_serialized_instance: encoded,
+        instance_hash_key: hash,
+        raw_instance: raw,
+        ...rest
+    } = instance
 
-	if (idBase === 'block') {
-		const parsedBlocks = parse(raw.content)
-		block = parsedBlocks.length
-			? parsedBlocks[0]
-			: createBlock('core/paragraph', {})
-	} else if (number) {
-		// Widget that extends WP_Widget.
-		block = createBlock('core/legacy-widget', {
-			idBase,
-			instance: {
-				encoded,
-				hash,
-				raw,
-				...rest,
-			},
-		})
-	} else {
-		// Widget that does not extend WP_Widget.
-		block = createBlock('core/legacy-widget', {
-			id,
-		})
-	}
+    if (idBase === 'block') {
+        const parsedBlocks = parse(raw.content)
+        block = parsedBlocks.length
+            ? parsedBlocks[0]
+            : createBlock('core/paragraph', {})
+    } else if (number) {
+        // Widget that extends WP_Widget.
+        block = createBlock('core/legacy-widget', {
+            idBase,
+            instance: {
+                encoded,
+                hash,
+                raw,
+                ...rest,
+            },
+        })
+    } else {
+        // Widget that does not extend WP_Widget.
+        block = createBlock('core/legacy-widget', {
+            id,
+        })
+    }
 
-	return addWidgetIdToBlock(block, id)
+    return addWidgetIdToBlock(block, id)
 }

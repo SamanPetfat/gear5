@@ -1,19 +1,19 @@
 import {
-	createElement,
-	Component,
-	Fragment,
-	memo,
-	useMemo,
+    createElement,
+    Component,
+    Fragment,
+    memo,
+    useMemo,
 } from '@wordpress/element'
 
 const Jsx = (props) => {
-	const { option } = props
+    const { option } = props
 
-	if (option.render) {
-		return option.render(props)
-	}
+    if (option.render) {
+        return option.render(props)
+    }
 
-	return null
+    return null
 }
 
 export default Jsx

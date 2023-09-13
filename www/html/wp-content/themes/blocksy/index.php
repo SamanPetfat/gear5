@@ -13,5 +13,4 @@
  * @package Blocksy
  */
 
-get_template_part( 'archive' );
-
+get_template_part('archive');

@@ -15,7 +15,7 @@
  * @version 3.5.0
  */
 
-defined( 'ABSPATH' ) || exit;
+defined('ABSPATH') || exit;
 
 /**
  * My Account navigation.
@@ -23,25 +23,25 @@ defined( 'ABSPATH' ) || exit;
  * @since 2.6.0
  */
 if (blocksy_woocommerce_has_account_customizations()) {
-	echo '<div class="ct-acount-nav">';
+    echo '<div class="ct-acount-nav">';
 }
 
 do_action('woocommerce_account_navigation');
 
 if (blocksy_woocommerce_has_account_customizations()) {
-	echo '</div>';
+    echo '</div>';
 }
 
 ?>
 
 <div class="woocommerce-MyAccount-content">
-	<?php
-		/**
-		 * My Account content.
-		 *
-		 * @since 2.6.0
-		 */
-		do_action( 'woocommerce_account_content' );
-	?>
+    <?php
+        /**
+         * My Account content.
+         *
+         * @since 2.6.0
+         */
+        do_action('woocommerce_account_content');
+    ?>
 </div>
 

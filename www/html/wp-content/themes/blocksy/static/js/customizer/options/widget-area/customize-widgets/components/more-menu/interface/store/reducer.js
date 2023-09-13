@@ -20,18 +20,19 @@ import { combineReducers } from '@wordpress/data'
  *
  * @return {Object} Updated state.
  */
-export function singleEnableItems(state = {}, { type, itemType, scope, item }) {
-	if (type !== 'SET_SINGLE_ENABLE_ITEM' || !itemType || !scope) {
-		return state
-	}
+export function singleEnableItems(state = {}, { type, itemType, scope, item })
+{
+    if (type !== 'SET_SINGLE_ENABLE_ITEM' || !itemType || !scope) {
+        return state
+    }
 
-	return {
-		...state,
-		[itemType]: {
-			...state[itemType],
-			[scope]: item || null,
-		},
-	}
+    return {
+        ...state,
+        [itemType]: {
+            ...state[itemType],
+            [scope]: item || null,
+        },
+    }
 }
 
 /**
@@ -48,31 +49,31 @@ export function singleEnableItems(state = {}, { type, itemType, scope, item }) {
  * @return {Object} Updated state.
  */
 export function multipleEnableItems(
-	state = {},
-	{ type, itemType, scope, item, isEnable }
+    state = {},
+    { type, itemType, scope, item, isEnable }
 ) {
-	if (
-		type !== 'SET_MULTIPLE_ENABLE_ITEM' ||
-		!itemType ||
-		!scope ||
-		!item ||
-		get(state, [itemType, scope, item]) === isEnable
-	) {
-		return state
-	}
-	const currentTypeState = state[itemType] || {}
-	const currentScopeState = currentTypeState[scope] || {}
+    if (
+        type !== 'SET_MULTIPLE_ENABLE_ITEM' ||
+        !itemType ||
+        !scope ||
+        !item ||
+        get(state, [itemType, scope, item]) === isEnable
+    ) {
+        return state
+    }
+    const currentTypeState = state[itemType] || {}
+    const currentScopeState = currentTypeState[scope] || {}
 
-	return {
-		...state,
-		[itemType]: {
-			...currentTypeState,
-			[scope]: {
-				...currentScopeState,
-				[item]: isEnable || false,
-			},
-		},
-	}
+    return {
+        ...state,
+        [itemType]: {
+            ...currentTypeState,
+            [scope]: {
+                ...currentScopeState,
+                [item]: isEnable || false,
+            },
+        },
+    }
 }
 
 /**
@@ -87,20 +88,20 @@ export function multipleEnableItems(
  * @return {Object} Updated state.
  */
 export const preferenceDefaults = flow([combineReducers])({
-	features(state = {}, action) {
-		if (action.type === 'SET_FEATURE_DEFAULTS') {
-			const { scope, defaults } = action
-			return {
-				...state,
-				[scope]: {
-					...state[scope],
-					...defaults,
-				},
-			}
-		}
+    features(state = {}, action) {
+        if (action.type === 'SET_FEATURE_DEFAULTS') {
+            const { scope, defaults } = action
+            return {
+                ...state,
+                [scope]: {
+                    ...state[scope],
+                    ...defaults,
+                },
+            }
+        }
 
-		return state
-	},
+        return state
+    },
 })
 
 /**
@@ -112,29 +113,29 @@ export const preferenceDefaults = flow([combineReducers])({
  * @return {Object} Updated state.
  */
 export const preferences = flow([combineReducers])({
-	features(state = {}, action) {
-		if (action.type === 'SET_FEATURE_VALUE') {
-			const { scope, featureName, value } = action
-			return {
-				...state,
-				[scope]: {
-					...state[scope],
-					[featureName]: value,
-				},
-			}
-		}
+    features(state = {}, action) {
+        if (action.type === 'SET_FEATURE_VALUE') {
+            const { scope, featureName, value } = action
+            return {
+                ...state,
+                [scope]: {
+                    ...state[scope],
+                    [featureName]: value,
+                },
+            }
+        }
 
-		return state
-	},
+        return state
+    },
 })
 
 const enableItems = combineReducers({
-	singleEnableItems,
-	multipleEnableItems,
+    singleEnableItems,
+    multipleEnableItems,
 })
 
 export default combineReducers({
-	enableItems,
-	preferenceDefaults,
-	preferences,
+    enableItems,
+    preferenceDefaults,
+    preferences,
 })

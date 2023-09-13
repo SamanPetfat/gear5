@@ -1,30 +1,30 @@
 export const mount = (reference) => {
-	if (!reference.nextElementSibling) {
-		return
-	}
+    if (!reference.nextElementSibling) {
+        return
+    }
 
-	const target = reference.nextElementSibling
+    const target = reference.nextElementSibling
 
-	let placement =
-		reference.getBoundingClientRect().left > innerWidth / 2
-			? 'left'
-			: 'right'
+    let placement =
+        reference.getBoundingClientRect().left > innerWidth / 2
+            ? 'left'
+            : 'right'
 
-	if (
-		reference.getBoundingClientRect().left +
-			target.getBoundingClientRect().width >
-		innerWidth
-	) {
-		placement = 'left'
-	}
+    if (
+        reference.getBoundingClientRect().left +
+            target.getBoundingClientRect().width >
+        innerWidth
+    ) {
+        placement = 'left'
+    }
 
-	if (
-		reference.getBoundingClientRect().left -
-			target.getBoundingClientRect().width <
-		0
-	) {
-		placement = 'right'
-	}
+    if (
+        reference.getBoundingClientRect().left -
+            target.getBoundingClientRect().width <
+        0
+    ) {
+        placement = 'right'
+    }
 
-	target.dataset.placement = placement
+    target.dataset.placement = placement
 }

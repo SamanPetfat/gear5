@@ -20,53 +20,57 @@ import { store as blockEditorStore } from '@wordpress/block-editor'
  * @param {Object} sidebarControl The sidebar control instance.
  * @param {Object} popoverRef     The ref object of the popover node container.
  */
-export default function useClearSelectedBlock(sidebarControl, popoverRef) {
-	const { hasSelectedBlock, hasMultiSelection } = useSelect(blockEditorStore)
-	const { clearSelectedBlock } = useDispatch(blockEditorStore)
+export default function useClearSelectedBlock(sidebarControl, popoverRef)
+{
+    const { hasSelectedBlock, hasMultiSelection } = useSelect(blockEditorStore)
+    const { clearSelectedBlock } = useDispatch(blockEditorStore)
 
-	useEffect(() => {
-		function handleClearSelectedBlock(element) {
-			if (!popoverRef.current || !sidebarControl) {
-				return
-			}
+    useEffect(() => {
+        function handleClearSelectedBlock(element)
+        {
+            if (!popoverRef.current || !sidebarControl) {
+                return
+            }
 
-			if (
-				// 1. Make sure there are blocks being selected.
-				(hasSelectedBlock() || hasMultiSelection()) &&
-				// 2. The element should exist in the DOM (not deleted).
-				element &&
-				document.contains(element) &&
-				!popoverRef.current.contains(element) &&
-				!element.closest('[role="dialog"]') &&
-				!element.closest('[role="toolbar"]') &&
-				!element.closest('.components-popover__content') &&
-				!element.closest('.ct-panel-second-level') &&
-				!element.closest('.wp-block-legacy-widget__edit-form')
-			) {
-				clearSelectedBlock()
-			}
-		}
+            if (
+                // 1. Make sure there are blocks being selected.
+                (hasSelectedBlock() || hasMultiSelection()) &&
+                // 2. The element should exist in the DOM (not deleted).
+                element &&
+                document.contains(element) &&
+                !popoverRef.current.contains(element) &&
+                !element.closest('[role="dialog"]') &&
+                !element.closest('[role="toolbar"]') &&
+                !element.closest('.components-popover__content') &&
+                !element.closest('.ct-panel-second-level') &&
+                !element.closest('.wp-block-legacy-widget__edit-form')
+            ) {
+                clearSelectedBlock()
+            }
+        }
 
-		function handleMouseDown(event) {
-			handleClearSelectedBlock(event.target)
-		}
+        function handleMouseDown(event)
+        {
+            handleClearSelectedBlock(event.target)
+        }
 
-		function handleBlur() {
-			handleClearSelectedBlock(document.activeElement)
-		}
+        function handleBlur()
+        {
+            handleClearSelectedBlock(document.activeElement)
+        }
 
-		document.addEventListener('mousedown', handleMouseDown)
-		window.addEventListener('blur', handleBlur)
+        document.addEventListener('mousedown', handleMouseDown)
+        window.addEventListener('blur', handleBlur)
 
-		return () => {
-			document.removeEventListener('mousedown', handleMouseDown)
-			window.removeEventListener('blur', handleBlur)
-		}
-	}, [
-		popoverRef,
-		sidebarControl,
-		hasSelectedBlock,
-		hasMultiSelection,
-		clearSelectedBlock,
-	])
+        return () => {
+            document.removeEventListener('mousedown', handleMouseDown)
+            window.removeEventListener('blur', handleBlur)
+        }
+    }, [
+        popoverRef,
+        sidebarControl,
+        hasSelectedBlock,
+        hasMultiSelection,
+        clearSelectedBlock,
+    ])
 }

@@ -1,8 +1,8 @@
 import { createContext } from '@wordpress/element'
 
 export const getDefaultValue = () => ({
-	theme_version: '1.0.0',
-	theme_name: 'Word'
+    theme_version: '1.0.0',
+    theme_name: 'Word'
 })
 
 const DashboardContext = createContext(getDefaultValue())

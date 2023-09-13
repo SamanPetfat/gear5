@@ -5,19 +5,19 @@ let prevInnerWidth = null
 let prevScrollY = null
 
 const renderHeader = () => {
-	if (!prevInnerWidth || window.innerWidth !== prevInnerWidth) {
-		prevInnerWidth = window.innerWidth
-		ctEvents.trigger('ct:header:render-frame')
-	}
+    if (!prevInnerWidth || window.innerWidth !== prevInnerWidth) {
+        prevInnerWidth = window.innerWidth
+        ctEvents.trigger('ct:header:render-frame')
+    }
 
-	if (prevScrollY === null || window.scrollY !== prevScrollY) {
-		prevScrollY = window.scrollY
-		ctEvents.trigger('ct:scroll:render-frame')
-	}
+    if (prevScrollY === null || window.scrollY !== prevScrollY) {
+        prevScrollY = window.scrollY
+        ctEvents.trigger('ct:scroll:render-frame')
+    }
 
-	requestAnimationFrame(renderHeader)
+    requestAnimationFrame(renderHeader)
 }
 
 export const mountRenderHeaderLoop = () => {
-	requestAnimationFrame(renderHeader)
+    requestAnimationFrame(renderHeader)
 }

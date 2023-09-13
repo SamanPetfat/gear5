@@ -1,12 +1,11 @@
 <?php
 
 $config = [
-	'name' => __('Socials', 'blocksy'),
-	'clone' => true,
+    'name' => __('Socials', 'blocksy'),
+    'clone' => true,
 
-	'selective_refresh' => [
-		'header_socials',
-		'headerSocialsColor'
-	],
+    'selective_refresh' => [
+        'header_socials',
+        'headerSocialsColor'
+    ],
 ];
-

@@ -13,4 +13,3 @@
  * It's the actual WordPress sidebar content.
  */
 echo blocksy_render_sidebar();
-

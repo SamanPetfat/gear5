@@ -14,39 +14,43 @@ import { speak } from '@wordpress/a11y'
 import { store as interfaceStore } from './interface/store/'
 
 export default function MoreMenuFeatureToggle({
-	scope,
-	label,
-	info,
-	messageActivated,
-	messageDeactivated,
-	shortcut,
-	feature,
-}) {
-	const isActive = useSelect(
-		(select) => select(interfaceStore).isFeatureActive(scope, feature),
-		[feature]
-	)
-	const { toggleFeature } = useDispatch(interfaceStore)
-	const speakMessage = () => {
-		if (isActive) {
-			speak(messageDeactivated || __('Feature deactivated', 'blocksy'))
-		} else {
-			speak(messageActivated || __('Feature activated', 'blocksy'))
-		}
-	}
+    scope,
+    label,
+    info,
+    messageActivated,
+    messageDeactivated,
+    shortcut,
+    feature,
+})
+{
+    const isActive = useSelect(
+        (select) => select(interfaceStore).isFeatureActive(
+            scope,
+        feature
+        ),
+        [feature]
+    )
+    const { toggleFeature } = useDispatch(interfaceStore)
+    const speakMessage = () => {
+        if (isActive) {
+            speak(messageDeactivated || __('Feature deactivated', 'blocksy'))
+        } else {
+            speak(messageActivated || __('Feature activated', 'blocksy'))
+        }
+    }
 
-	return (
-		<MenuItem
-			icon={isActive && check}
-			isSelected={isActive}
-			onClick={() => {
-				toggleFeature(scope, feature)
-				speakMessage()
-			}}
-			role="menuitemcheckbox"
-			info={info}
-			shortcut={shortcut}>
-			{label}
-		</MenuItem>
-	)
+    return (
+        <MenuItem
+            icon={isActive && check}
+            isSelected={isActive}
+            onClick={() => {
+                toggleFeature(scope, feature)
+                speakMessage()
+                }}
+            role="menuitemcheckbox"
+            info={info}
+            shortcut={shortcut}>
+            {label}
+        </MenuItem>
+    )
 }

@@ -14,49 +14,49 @@
  * @version 3.5.5
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
+if (! defined('ABSPATH')) {
+    exit;
 }
 
 global $product;
 
-if ( ! is_a( $product, 'WC_Product' ) ) {
-	return;
+if (! is_a($product, 'WC_Product')) {
+    return;
 }
 
 ?>
 <li>
-	<?php do_action( 'woocommerce_widget_product_item_start', $args ); ?>
+    <?php do_action('woocommerce_widget_product_item_start', $args); ?>
 
-		<?php
+        <?php
 
-			echo blocksy_image([
-				'no_image_type' => 'woo',
-				'attachment_id' => $product->get_image_id(),
-				'post_id' => $product->get_id(),
-				'size' => 'woocommerce_gallery_thumbnail',
-				'ratio' => '1/1',
-				'tag_name' => 'a',
-				'html_atts' => [
-					'href' => esc_url( $product->get_permalink() )
-				],
-			]);
+            echo blocksy_image([
+                'no_image_type' => 'woo',
+                'attachment_id' => $product->get_image_id(),
+                'post_id' => $product->get_id(),
+                'size' => 'woocommerce_gallery_thumbnail',
+                'ratio' => '1/1',
+                'tag_name' => 'a',
+                'html_atts' => [
+                    'href' => esc_url($product->get_permalink())
+                ],
+            ]);
 
-		?>
+            ?>
 
-		<div class="product-data">
-			<a href="<?php echo esc_url( $product->get_permalink() ); ?>" class="product-title">
-				<?php echo wp_kses_post( $product->get_name() ); ?>
-			</a>
+        <div class="product-data">
+            <a href="<?php echo esc_url($product->get_permalink()); ?>" class="product-title">
+                <?php echo wp_kses_post($product->get_name()); ?>
+            </a>
 
-			<?php if ( ! empty( $show_rating ) ) : ?>
-				<?php echo wc_get_rating_html( $product->get_average_rating() ); // PHPCS:Ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-			<?php endif; ?>
+            <?php if (! empty($show_rating)) : ?>
+                <?php echo wc_get_rating_html($product->get_average_rating()); // PHPCS:Ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+            <?php endif; ?>
 
-			<span class="price">
-				<?php echo $product->get_price_html(); // PHPCS:Ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-			</span>
-		</div>
+            <span class="price">
+                <?php echo $product->get_price_html(); // PHPCS:Ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+            </span>
+        </div>
 
-	<?php do_action( 'woocommerce_widget_product_item_end', $args ); ?>
+    <?php do_action('woocommerce_widget_product_item_end', $args); ?>
 </li>

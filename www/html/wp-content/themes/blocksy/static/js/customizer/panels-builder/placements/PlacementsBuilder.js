@@ -5,46 +5,46 @@ import DraggableItems from './DraggableItems'
 import Row from './PlacementsBuilder/Row'
 
 const PlacementsBuilder = ({
-	inlinedItemsFromBuilder,
-	view,
-	builderValueWithView,
+    inlinedItemsFromBuilder,
+    view,
+    builderValueWithView,
 }) => {
-	let hasOffcanvas =
-		view === 'mobile' ||
-		(inlinedItemsFromBuilder.indexOf('trigger') > -1 &&
-			builderValueWithView.find(({ id }) => id === 'offcanvas'))
+    let hasOffcanvas =
+        view === 'mobile' ||
+        (inlinedItemsFromBuilder.indexOf('trigger') > -1 &&
+            builderValueWithView.find(({ id }) => id === 'offcanvas'))
 
-	return (
-		<div
-			className={cls('placements-builder', {
-				'ct-mobile': hasOffcanvas,
-			})}>
-			{hasOffcanvas && (
-				<ul className="offcanvas-container">
-					<Row
-						direction="vertical"
-						bar={builderValueWithView.find(
-							({ id }) => id === 'offcanvas'
-						)}
-					/>
-				</ul>
-			)}
+    return (
+        <div
+            className={cls('placements-builder', {
+                'ct-mobile': hasOffcanvas,
+            })}>
+            {hasOffcanvas && (
+                <ul className="offcanvas-container">
+                    <Row
+                        direction="vertical"
+                        bar={builderValueWithView.find(
+                            ({ id }) => id === 'offcanvas'
+                        )}
+                    />
+                </ul>
+            )}
 
-			<ul className="horizontal-rows">
-				{['top-row', 'middle-row', 'bottom-row'].map((bar) => {
-					const maybeBar = builderValueWithView.find(
-						({ id }) => id === bar
-					)
+            <ul className="horizontal-rows">
+                {['top-row', 'middle-row', 'bottom-row'].map((bar) => {
+                    const maybeBar = builderValueWithView.find(
+                        ({ id }) => id === bar
+                    )
 
-					if (!maybeBar) {
-						return null
-					}
+                if (!maybeBar) {
+                    return null
+                }
 
-					return <Row bar={maybeBar} key={bar} />
-				})}
-			</ul>
-		</div>
-	)
+                    return <Row bar={maybeBar} key={bar} />
+                })}
+            </ul>
+        </div>
+    )
 }
 
 export default PlacementsBuilder
