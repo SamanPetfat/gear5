@@ -348,6 +348,36 @@
         name: apache2
         state: restarted
 
+- name: Install WP-CLI
+  hosts: staging
+  become: true
+
+  tasks:
+    - name: Check if wp-cli exists
+      stat: 
+        path: "{{ root_bin }}/wp"
+      register: wpcli_exist
+      tags:
+        - always
+
+    - name: Updating wp-cli
+      shell: "{{ root_bin }}/wp cli update --yes"
+      when: wpcli_exist.stat.exists
+      tags:
+        - wp
+        - update
+
+    - name: Download wp-cli
+      get_url:
+        url: "https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar"
+        dest: "{{ root_bin }}/wp"
+        force_basic_auth: yes
+        mode: "0755"
+      when: not wpcli_exist.stat.exists
+      tags:
+        - wp
+        - install
+
 - name: Run tests
   hosts: staging
   become: true
