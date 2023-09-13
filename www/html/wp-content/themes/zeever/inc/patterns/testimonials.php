@@ -4,9 +4,9 @@
  * Testimonials content.
  */
 return array(
-	'title'      => __( 'Testimonials', 'zeever' ),
-	'categories' => array( 'zeever-basic' ),
-	'content'    => '<!-- wp:group {"style":{"spacing":{"padding":{"top":"0px","bottom":"100px"}},"color":{"background":"#121212"}},"layout":{"inherit":true}} -->
+    'title'      => __('Testimonials', 'zeever'),
+    'categories' => array( 'zeever-basic' ),
+    'content'    => '<!-- wp:group {"style":{"spacing":{"padding":{"top":"0px","bottom":"100px"}},"color":{"background":"#121212"}},"layout":{"inherit":true}} -->
                 <div class="wp-block-group has-background" style="background-color:#121212;padding-top:0px;padding-bottom:100px"><!-- wp:columns {"align":"full"} -->
                 <div class="wp-block-columns alignfull"><!-- wp:column -->
                 <div class="wp-block-column"><!-- wp:group -->
@@ -16,7 +16,7 @@ return array(
                 <div class="wp-block-group has-border-color has-zeever-border-border-color has-black-background-color has-background" style="border-top-left-radius:0px;border-top-right-radius:0px;border-bottom-left-radius:0px;border-bottom-right-radius:0px;border-style:solid;border-width:1px;padding-top:40px;padding-right:40px;padding-bottom:80px;padding-left:40px"><!-- wp:columns -->
                 <div class="wp-block-columns"><!-- wp:column -->
                 <div class="wp-block-column"><!-- wp:image {"align":"center","id":136,"width":60,"sizeSlug":"full","linkDestination":"none"} -->
-                <figure class="wp-block-image aligncenter size-full is-resized"><img src="' . esc_url( ZEEVER_URI ) . 'assets/img/quote.webp" alt="" class="wp-image-136" width="60"/></figure>
+                <figure class="wp-block-image aligncenter size-full is-resized"><img src="' . esc_url(ZEEVER_URI) . 'assets/img/quote.webp" alt="" class="wp-image-136" width="60"/></figure>
                 <!-- /wp:image --></div>
                 <!-- /wp:column --></div>
                 <!-- /wp:columns -->
@@ -27,7 +27,7 @@ return array(
                 <!-- /wp:group -->
 
                 <!-- wp:image {"align":"center","id":94,"width":70,"height":70,"sizeSlug":"full","linkDestination":"none","style":{"border":{"radius":"50px"}},"className":"zeever-margin-top-n40 is-style-rounded"} -->
-                <figure class="wp-block-image aligncenter size-full is-resized zeever-margin-top-n40 is-style-rounded" style="border-radius:50px"><img src="' . esc_url( ZEEVER_URI ) . 'assets/img/man-person-people-hair-photography-summer-1177664-pxhere.com.webp" alt="" class="wp-image-94" width="70" height="70"/></figure>
+                <figure class="wp-block-image aligncenter size-full is-resized zeever-margin-top-n40 is-style-rounded" style="border-radius:50px"><img src="' . esc_url(ZEEVER_URI) . 'assets/img/man-person-people-hair-photography-summer-1177664-pxhere.com.webp" alt="" class="wp-image-94" width="70" height="70"/></figure>
                 <!-- /wp:image -->
 
                 <!-- wp:heading {"textAlign":"center","style":{"spacing":{"margin":{"top":"15px"}}},"textColor":"white","fontSize":"tiny"} -->
@@ -44,7 +44,7 @@ return array(
                 <div class="wp-block-group has-border-color has-zeever-border-border-color has-black-background-color has-background" style="border-top-left-radius:0px;border-top-right-radius:0px;border-bottom-left-radius:0px;border-bottom-right-radius:0px;border-style:solid;border-width:1px;padding-top:40px;padding-right:40px;padding-bottom:80px;padding-left:40px"><!-- wp:columns -->
                 <div class="wp-block-columns"><!-- wp:column -->
                 <div class="wp-block-column"><!-- wp:image {"align":"center","id":136,"width":60,"sizeSlug":"full","linkDestination":"none"} -->
-                <figure class="wp-block-image aligncenter size-full is-resized"><img src="' . esc_url( ZEEVER_URI ) . 'assets/img/quote.webp" alt="" class="wp-image-136" width="60"/></figure>
+                <figure class="wp-block-image aligncenter size-full is-resized"><img src="' . esc_url(ZEEVER_URI) . 'assets/img/quote.webp" alt="" class="wp-image-136" width="60"/></figure>
                 <!-- /wp:image --></div>
                 <!-- /wp:column --></div>
                 <!-- /wp:columns -->
@@ -55,7 +55,7 @@ return array(
                 <!-- /wp:group -->
 
                 <!-- wp:image {"align":"center","id":97,"width":70,"height":70,"sizeSlug":"full","linkDestination":"none","style":{"border":{"radius":"50px"}},"className":"zeever-margin-top-n40 is-style-rounded"} -->
-                <figure class="wp-block-image aligncenter size-full is-resized zeever-margin-top-n40 is-style-rounded" style="border-radius:50px"><img src="' . esc_url( ZEEVER_URI ) . 'assets/img/person-people-girl-woman-hair-photography-1172571-pxhere.com.webp" alt="" class="wp-image-97" width="70" height="70"/></figure>
+                <figure class="wp-block-image aligncenter size-full is-resized zeever-margin-top-n40 is-style-rounded" style="border-radius:50px"><img src="' . esc_url(ZEEVER_URI) . 'assets/img/person-people-girl-woman-hair-photography-1172571-pxhere.com.webp" alt="" class="wp-image-97" width="70" height="70"/></figure>
                 <!-- /wp:image -->
 
                 <!-- wp:heading {"textAlign":"center","style":{"spacing":{"margin":{"top":"15px"}}},"textColor":"white","fontSize":"tiny"} -->
@@ -72,7 +72,7 @@ return array(
                 <div class="wp-block-group has-border-color has-zeever-border-border-color has-black-background-color has-background" style="border-top-left-radius:0px;border-top-right-radius:0px;border-bottom-left-radius:0px;border-bottom-right-radius:0px;border-style:solid;border-width:1px;padding-top:40px;padding-right:40px;padding-bottom:80px;padding-left:40px"><!-- wp:columns -->
                 <div class="wp-block-columns"><!-- wp:column -->
                 <div class="wp-block-column"><!-- wp:image {"align":"center","id":136,"width":60,"sizeSlug":"full","linkDestination":"none"} -->
-                <figure class="wp-block-image aligncenter size-full is-resized"><img src="' . esc_url( ZEEVER_URI ) . 'assets/img/quote.webp" alt="" class="wp-image-136" width="60"/></figure>
+                <figure class="wp-block-image aligncenter size-full is-resized"><img src="' . esc_url(ZEEVER_URI) . 'assets/img/quote.webp" alt="" class="wp-image-136" width="60"/></figure>
                 <!-- /wp:image --></div>
                 <!-- /wp:column --></div>
                 <!-- /wp:columns -->
@@ -83,7 +83,7 @@ return array(
                 <!-- /wp:group -->
 
                 <!-- wp:image {"align":"center","id":96,"width":70,"height":70,"sizeSlug":"full","linkDestination":"none","style":{"border":{"radius":"50px"}},"className":"zeever-margin-top-n40 is-style-rounded"} -->
-                <figure class="wp-block-image aligncenter size-full is-resized zeever-margin-top-n40 is-style-rounded" style="border-radius:50px"><img src="' . esc_url( ZEEVER_URI ) . 'assets/img/person-girl-woman-hair-photography-portrait-108386-pxhere.com.webp" alt="" class="wp-image-96" width="70" height="70"/></figure>
+                <figure class="wp-block-image aligncenter size-full is-resized zeever-margin-top-n40 is-style-rounded" style="border-radius:50px"><img src="' . esc_url(ZEEVER_URI) . 'assets/img/person-girl-woman-hair-photography-portrait-108386-pxhere.com.webp" alt="" class="wp-image-96" width="70" height="70"/></figure>
                 <!-- /wp:image -->
 
                 <!-- wp:heading {"textAlign":"center","style":{"spacing":{"margin":{"top":"15px"}}},"textColor":"white","fontSize":"tiny"} -->
@@ -100,7 +100,7 @@ return array(
                 <div class="wp-block-group has-border-color has-zeever-border-border-color has-black-background-color has-background" style="border-top-left-radius:0px;border-top-right-radius:0px;border-bottom-left-radius:0px;border-bottom-right-radius:0px;border-style:solid;border-width:1px;padding-top:40px;padding-right:40px;padding-bottom:80px;padding-left:40px"><!-- wp:columns -->
                 <div class="wp-block-columns"><!-- wp:column -->
                 <div class="wp-block-column"><!-- wp:image {"align":"center","id":136,"width":60,"sizeSlug":"full","linkDestination":"none"} -->
-                <figure class="wp-block-image aligncenter size-full is-resized"><img src="' . esc_url( ZEEVER_URI ) . 'assets/img/quote.webp" alt="" class="wp-image-136" width="60"/></figure>
+                <figure class="wp-block-image aligncenter size-full is-resized"><img src="' . esc_url(ZEEVER_URI) . 'assets/img/quote.webp" alt="" class="wp-image-136" width="60"/></figure>
                 <!-- /wp:image --></div>
                 <!-- /wp:column --></div>
                 <!-- /wp:columns -->
@@ -111,7 +111,7 @@ return array(
                 <!-- /wp:group -->
 
                 <!-- wp:image {"align":"center","id":95,"width":70,"height":70,"sizeSlug":"full","linkDestination":"none","style":{"border":{"radius":"50px"}},"className":"zeever-margin-top-n40 is-style-rounded"} -->
-                <figure class="wp-block-image aligncenter size-full is-resized zeever-margin-top-n40 is-style-rounded" style="border-radius:50px"><img src="' . esc_url( ZEEVER_URI ) . 'assets/img/man-person-people-lawn-photography-model-1220414-pxhere.com.webp" alt="" class="wp-image-95" width="70" height="70"/></figure>
+                <figure class="wp-block-image aligncenter size-full is-resized zeever-margin-top-n40 is-style-rounded" style="border-radius:50px"><img src="' . esc_url(ZEEVER_URI) . 'assets/img/man-person-people-lawn-photography-model-1220414-pxhere.com.webp" alt="" class="wp-image-95" width="70" height="70"/></figure>
                 <!-- /wp:image -->
 
                 <!-- wp:heading {"textAlign":"center","style":{"spacing":{"margin":{"top":"15px"}}},"textColor":"white","fontSize":"tiny"} -->
