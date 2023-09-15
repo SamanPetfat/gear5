@@ -11,7 +11,7 @@
     <!-- wp:group {"className":"wp-block-group-heading"} -->
     <div class="wp-block-group wp-block-group-heading">
         <!-- wp:heading {"textAlign":"center"} -->
-        <h2 class="has-text-align-center"><?php esc_html_e ( 'Recent Products', 'bizboost' ) ?></h2>
+        <h2 class="has-text-align-center"><?php esc_html_e('Recent Products', 'bizboost') ?></h2>
         <!-- /wp:heading -->
     </div>
     <!-- /wp:group -->
