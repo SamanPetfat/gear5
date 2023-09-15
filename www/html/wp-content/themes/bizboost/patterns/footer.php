@@ -12,10 +12,10 @@
     <div class="wp-block-group alignfull wp-block-footer wp-block-site-generator"><!-- wp:group {"align":"wide","layout":{"type":"flex","flexWrap":"wrap","justifyContent":"space-between"}} -->
         <div class="wp-block-group alignwide"><!-- wp:paragraph {"align":"left"} -->
             <p class="has-text-align-left"><?php printf(
-                                                _x('Copyright &copy; %1$s %2$s', '1: Year, 2: Site Title with home URL, 3: Privacy Policy Link', 'bizboost'),
-                                                esc_attr(date_i18n(__('Y', 'bizboost'))),
-                                                '<a href="' . esc_url(home_url('/')) . '">' . esc_attr(get_bloginfo('name', 'display')) . '</a><span class="sep"> </span>  by <a target="_blank" href="https://catchthemes.com">Catch Themes</a>'
-                                            ); ?></p>
+                _x('Copyright &copy; %1$s %2$s', '1: Year, 2: Site Title with home URL, 3: Privacy Policy Link', 'bizboost'),
+                esc_attr(date_i18n(__('Y', 'bizboost'))),
+                '<a href="' . esc_url(home_url('/')) . '">' . esc_attr(get_bloginfo('name', 'display')) . '</a><span class="sep"> </span>  by <a target="_blank" href="https://catchthemes.com">Catch Themes</a>'
+            ); ?></p>
             <!-- /wp:paragraph -->
 
             <!-- wp:social-links {"className":"is-style-logos-only","layout":{"type":"flex","justifyContent":"center"}} -->
